@@ -4,7 +4,9 @@
   "description": "OOTP Park Generator",
   "main": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder"
   },
   "keywords": [
     "OOTP",
@@ -22,5 +24,30 @@
     "sql.js": "^1.6.2",
     "xml-escape": "^1.1.0",
     "xmlbuilder2": "^3.0.2"
+  },
+  "build": {
+    "appId": "com.hypermodules.testapp",
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        "zip",
+        "dmg"
+      ]
+    },
+    "portable": {
+      "artifactName": "${productName}_${version}_portable.${ext}"
+    },
+    "nsis": {
+      "perMachine": true,
+      "artifactName": "${productName}_${version}_setup.${ext}"
+    },
+    "linux": {
+      "target": [
+        "deb",
+        "rpm",
+        "tar.gz"
+      ]
+    },
+    "deb": {}
   }
 }
