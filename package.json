@@ -25,10 +25,6 @@
     "xmlbuilder2": "^3.0.2"
   },
   "packageManager": "yarn@3.1.0",
-  "devDependencies": {
-    "electron": "^16.0.0",
-    "electron-builder": "^22.13.1"
-  },
   "build": {
     "appId": "com.hypermodules.testapp",
     "mac": {
@@ -55,6 +51,7 @@
     "deb": {}
   },
   "devDependencies": {
+    "electron": "^16.0.0",
     "electron-builder": "^22.14.5"
   }
 }
