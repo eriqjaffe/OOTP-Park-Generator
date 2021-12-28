@@ -1,6 +1,6 @@
 {
   "name": "parkgen",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "OOTP Park Generator",
   "main": "main.js",
   "scripts": {
@@ -17,13 +17,17 @@
   "license": "ISC",
   "dependencies": {
     "archiver": "^5.3.0",
-    "electron": "^16.0.1",
     "electron-build": "^0.0.3",
     "express": "^4.17.1",
     "jimp": "^0.16.1",
     "sql.js": "^1.6.2",
     "xml-escape": "^1.1.0",
     "xmlbuilder2": "^3.0.2"
+  },
+  "packageManager": "yarn@3.1.0",
+  "devDependencies": {
+    "electron": "^16.0.0",
+    "electron-builder": "^22.13.1"
   },
   "build": {
     "appId": "com.hypermodules.testapp",
@@ -49,5 +53,8 @@
       ]
     },
     "deb": {}
+  },
+  "devDependencies": {
+    "electron-builder": "^22.14.5"
   }
 }
