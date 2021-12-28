@@ -13,6 +13,8 @@ const xmlescape = require('xml-escape');
 const Jimp = require('jimp');
 const archiver = require('archiver');
 const isMac = process.platform === 'darwin'
+const os = require('os');
+const tempDir = os.tmpdir()
 var db;
 
 const template = [
@@ -824,7 +826,7 @@ app2.post("/downloadBallpark", (req, res) => {
 
     var xmlBuffer = Buffer.from(xml, 'utf-8');
 
-    Jimp.read('./images/dome.png', (err, fir_img) => {
+    Jimp.read(__dirname + '/images/dome.png', (err, fir_img) => {
       if(err) {
         console.log(err);
       } else {
@@ -835,7 +837,7 @@ app2.post("/downloadBallpark", (req, res) => {
               sec_img.write(parkName+"_webcast.png")
               fir_img.composite(sec_img, 100, 0);
               fir_img.getBuffer(Jimp.MIME_PNG, (err, domeBuffer) => {
-                Jimp.read('./images/day_bg.png', (err, fir_img) => {
+                Jimp.read(__dirname + '/images/day_bg.png', (err, fir_img) => {
                   if(err) {
                     console.log(err);
                   } else {
@@ -845,7 +847,7 @@ app2.post("/downloadBallpark", (req, res) => {
                         } else {
                           fir_img.composite(sec_img, 100, 0);
                           fir_img.getBuffer(Jimp.MIME_PNG, (err, dayBuffer) => {
-                            Jimp.read('./images/night_bg.png', (err, fir_img) => {
+                            Jimp.read(__dirname + '/images/night_bg.png', (err, fir_img) => {
                               if(err) {
                                 console.log(err);
                               } else {
@@ -856,10 +858,10 @@ app2.post("/downloadBallpark", (req, res) => {
                                       fir_img.composite(sec_img, 100, 0);
                                       fir_img.getBuffer(Jimp.MIME_PNG, (err, nightBuffer) => {
 
-                                        var output = fs.createWriteStream(__dirname + '/'+parkName+'.zip');
+                                        var output = fs.createWriteStream(tempDir + '/'+parkName+'.zip');
                                         
                                         output.on('close', function() {
-                                          var data = fs.readFileSync(__dirname + '/'+parkName+'.zip');
+                                          var data = fs.readFileSync(tempDir + '/'+parkName+'.zip');
                                           var saveOptions = {
                                             defaultPath: app.getPath('downloads') + '/' + parkName+'.zip',
                                           }
@@ -868,14 +870,14 @@ app2.post("/downloadBallpark", (req, res) => {
                                               fs.writeFile(result.filePath, data, function(err) {
                                                 if (err) {
                                                   res.end(err)
-                                                  fs.unlink(__dirname + '/'+parkName+'.zip', (err) => {
+                                                  fs.unlink(tempDir + '/'+parkName+'.zip', (err) => {
                                                     if (err) {
                                                       console.error(err)
                                                       return
                                                     }
                                                   })
                                                 } else {
-                                                  fs.unlink(__dirname + '/'+parkName+'.zip', (err) => {
+                                                  fs.unlink(tempDir + '/'+parkName+'.zip', (err) => {
                                                     if (err) {
                                                       console.error(err)
                                                       return
@@ -885,7 +887,7 @@ app2.post("/downloadBallpark", (req, res) => {
                                                 };
                                               })
                                             } else {
-                                              fs.unlink(__dirname + '/'+parkName+'.zip', (err) => {
+                                              fs.unlink(tempDir + '/'+parkName+'.zip', (err) => {
                                                 if (err) {
                                                   console.error(err)
                                                   return
