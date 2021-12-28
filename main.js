@@ -89,7 +89,7 @@ const template = [
 	{
 		label: 'View project on GitHub',
 		click: async () => {
-		await shell.openExternal('https://github.com/eriqjaffe/parkgen')
+		await shell.openExternal('https://github.com/eriqjaffe/OOTP-Park-Generator')
 		}
 	}
     ]
