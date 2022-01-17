@@ -1,6 +1,6 @@
 {
   "name": "parkgen",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "OOTP Park Generator",
   "main": "main.js",
   "scripts": {
@@ -8,15 +8,10 @@
     "pack": "electron-builder --dir",
     "dist": "electron-builder"
   },
-  "keywords": [
-    "OOTP",
-    "Park",
-    "Generator"
-  ],
   "author": {
     "name": "Eriq Jaffe",
     "email": "eriqjaffe@gmail.com",
-    "url": "https://github.com/eriqjaffe/parkgen"
+    "url": "https://github.com/eriqjaffe/OOTP-Park-Generator"
   },
   "license": "ISC",
   "dependencies": {
@@ -30,7 +25,7 @@
   },
   "packageManager": "yarn@3.1.0",
   "build": {
-    "appId": "com.hypermodules.testapp",
+    "appId": "com.ootputilities.parkgen",
     "mac": {
       "category": "public.app-category.utilities",
       "target": [
@@ -42,8 +37,14 @@
       "artifactName": "${productName}_${version}_portable.${ext}"
     },
     "nsis": {
+      "oneClick": false,
       "perMachine": true,
-      "artifactName": "${productName}_${version}_setup.${ext}"
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "artifactName": "${productName}_${version}_setup.${ext}",
+      "menuCategory": "OOTP Utilities",
+      "shortcutName": "OOTP Park Generator",
+      "include": "build/installer.nsh"
     },
     "linux": {
       "target": [
