@@ -103,7 +103,7 @@ initSqlJs().then(function(SQL){
   db = new SQL.Database(filebuffer);
 });
 
-const port = 8080;
+const port = 8083;
 
 app2.listen(port, () => {
   console.log(`Server running on port ${port}`);
