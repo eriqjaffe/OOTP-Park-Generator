@@ -13,6 +13,9 @@
     <script type="text/javascript" src="./scripts/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="./scripts/spin.min.js"></script>
     <script>
+        const params = new URLSearchParams(window.location.search)
+		const port = params.get('port')
+
         var doc = document.documentElement;
         doc.setAttribute('data-useragent', navigator.userAgent);
 
@@ -919,7 +922,7 @@
                 return false;
             });
             $.ajax({
-                url: "http://127.0.0.1:8083/getCountries",
+                url: "http://127.0.0.1:"+port+"/getCountries",
                 type: "GET",
                 success: function(data) {
                     $("#ballparkCountry").append($('<option>', {
@@ -947,7 +950,7 @@
         $("#templateDownload").on("click",function(e) {
             e.preventDefault;
             $.ajax({
-                url: "http://127.0.0.1:8083/getTemplate",
+                url: "http://127.0.0.1:"+port+"/getTemplate",
                 type: "GET",
                 success: function(data) {
 
@@ -1142,7 +1145,7 @@
         $('#ballparkCountry').change(function() {
             $.ajax({
                 //url: "statecount.php",
-                url: "http://127.0.0.1:8083/stateCount",
+                url: "http://127.0.0.1:"+port+"/stateCount",
                 method: "post",
                 data: {
                     country: $("#ballparkCountry").val()
@@ -1151,7 +1154,7 @@
                     $("#ballparkState").html("");
                     if (parseInt(data) > 0) {
                         $.ajax({
-                            url: "http://127.0.0.1:8083/getStates",
+                            url: "http://127.0.0.1:"+port+"/getStates",
                             //url: "states.php",
                             method: "post",
                             data: {
@@ -1178,7 +1181,7 @@
                         $("#ballparkCity").html("");
                         $("#ballparkState").prop("disabled", true);
                         $.ajax({
-                            url: "http://127.0.0.1:8083/getCitiesNS",
+                            url: "http://127.0.0.1:"+port+"/getCitiesNS",
                             //url: "cities2.php",
                             method: "post",
                             data: {
@@ -1206,7 +1209,7 @@
         $('#ballparkState').change(function() {
             $("#ballparkCity").html("");
             $.ajax({
-                url: "http://127.0.0.1:8083/getCities",
+                url: "http://127.0.0.1:"+port+"/getCities",
                 //url: "cities.php",
                 method: "post",
                 data: {
@@ -1236,7 +1239,7 @@
                 state = $("#ballparkState").val();
             }
             $.ajax({
-                url: "http://127.0.0.1:8083/getWeather",
+                url: "http://127.0.0.1:"+port+"/getWeather",
                 //url: "getweather.php",
                 method: "post",
                 data: {
@@ -1397,7 +1400,7 @@
             var city;
             $.ajax({
                 type: "GET",
-                url: "http://127.0.0.1:8083/randomName",
+                url: "http://127.0.0.1:"+port+"/randomName",
                 success: function(data) {
                     $("#ballparkName").val(data);
                 },
@@ -1407,7 +1410,7 @@
             });
             $.ajax({
                 type: "GET",
-                url: "http://127.0.0.1:8083/randomCity",
+                url: "http://127.0.0.1:"+port+"/randomCity",
                 dataType: "json",
                 success: function(data) {
                     $("#ballparkAltitude").val(data.Altitude);
@@ -1439,7 +1442,7 @@
                     state = data.State;
                     city = data.City;
                     $.ajax({
-                        url: "http://127.0.0.1:8083/getStates",
+                        url: "http://127.0.0.1:"+port+"/getStates",
                         method: "GET",
                         datatype: "json",
                         success: function(data) {
@@ -1457,7 +1460,7 @@
                                 }));
                             });
                             $.ajax({
-                                url: "http://127.0.0.1:8083/getCities",
+                                url: "http://127.0.0.1:"+port+"/getCities",
                                 method: "post",
                                 data: {
                                     country: "United States of America",
@@ -2627,7 +2630,7 @@
         function calculateFactors() {
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:8083/calculateFactors",
+                url: "http://127.0.0.1:"+port+"/calculateFactors",
                 data: $("#ballparkInformation").serialize(),
                 dataType: "json",
                 success: function(data) {
@@ -2702,7 +2705,7 @@
             $(".overlay").css("display","table");
             $.ajax({
                 type: "POST",
-                url: "http://127.0.0.1:8083/downloadBallpark",
+                url: "http://127.0.0.1:"+port+"/downloadBallpark",
                 data: $("#ballparkInformation").serialize(),
                 success: function(data) {  
                     if (data == "success") {
@@ -2736,7 +2739,7 @@
             $("#ballparkInformation").attr("method","post");
             $("#ballparkInformation").attr("target","_blank");
             //$("#ballparkInformation").attr("action","packagepark2.php");
-            $("#ballparkInformation").attr("action","http://127.0.0.1:8083/downloadBallpark");
+            $("#ballparkInformation").attr("action","http://127.0.0.1:"+port+"/downloadBallpark");
             switch ($("#playerCoordSelect").val()) {
                 case "broadcastPlayers":
                     broadcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));

@@ -1,6 +1,6 @@
 {
   "name": "parkgen",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "OOTP Park Generator",
   "main": "main.js",
   "scripts": {
@@ -16,7 +16,6 @@
   "license": "ISC",
   "dependencies": {
     "archiver": "^5.3.0",
-    "electron-build": "^0.0.3",
     "express": "^4.17.1",
     "jimp": "^0.16.1",
     "sql.js": "^1.6.2",
@@ -33,6 +32,12 @@
         "dmg"
       ]
     },
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
     "portable": {
       "artifactName": "${productName}_${version}_portable.${ext}"
     },
@@ -41,10 +46,13 @@
       "perMachine": true,
       "allowToChangeInstallationDirectory": true,
       "allowElevation": true,
-      "artifactName": "${productName}_${version}_setup.${ext}",
+      "artifactName": "${productName} ${version} setup.${ext}",
       "menuCategory": "OOTP Utilities",
-      "shortcutName": "OOTP Park Generator",
-      "include": "build/installer.nsh"
+      "shortcutName": "${productName}",
+      "include": "build/installer.nsh",
+      "uninstallDisplayName": "${productName} ${version}",
+      "installerIcon": "build/icon.ico",
+      "uninstallerIcon": "build/icon.ico"
     },
     "linux": {
       "target": [
@@ -56,7 +64,7 @@
     "deb": {}
   },
   "devDependencies": {
-    "electron": "^16.0.0",
+    "electron": "^17.1.0",
     "electron-builder": "^22.14.5"
   }
 }
