@@ -16,8 +16,9 @@
   },
   "license": "ISC",
   "dependencies": {
+    "add-filename-increment": "^1.0.0",
     "archiver": "^5.3.0",
-    "express": "^4.17.1",
+    "electron-store": "^8.1.0",
     "jimp": "^0.16.1",
     "sql.js": "^1.6.2",
     "xml-escape": "^1.1.0",
