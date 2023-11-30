@@ -1,7 +1,7 @@
 // main.js
 
 // Modules to control application life and create native browser window
-const { app, BrowserWindow, dialog,  Menu, shell } = require('electron')
+const { app, BrowserWindow, dialog,  Menu, shell, ipcMain } = require('electron')
 const path = require('path')
 const express = require('express');
 const app2 = express();
@@ -109,16 +109,30 @@ const server = app2.listen(0, () => {
 
 app2.use(express.urlencoded({limit: '50mb', extended: true, parameterLimit: 50000}));
 
-app2.get("/getCountries", (req, res) => {
-  var output = [];
+ipcMain.on('get-countries', (event, arg) => {
+  let output = [];
   output.push("United States of America");
   db.each('SELECT distinct Country from weather WHERE Country <> "United States of America" order by Country asc',
     function (row){output.push(row.Country)}
   );
-  res.end(JSON.stringify(output));
+  event.sender.send('get-countries-response',JSON.stringify(output))
 })
 
-app2.post("/stateCount", (req, res) => {
+ipcMain.on('get-states', (event, arg) => {
+  let result = db.exec('SELECT count(State) as count from weather where Country = "'+arg.country +'"  and length(State) > 0')
+  let count = parseInt(result[0].values[0][0])
+  if (count < 1) {
+    event.sender.send('get-states-response',{count: count, states: null})
+  } else {
+    let output = [];
+    db.each('SELECT distinct State from weather WHERE Country = "'+arg.country+'" order by Country asc',
+      function (row){output.push(row.State)}
+    );
+    event.sender.send('get-states-response', {count: count, states: JSON.stringify(output)});
+  }
+})
+
+/* app2.post("/stateCount", (req, res) => {
   var result = db.exec('SELECT count(State) as count from weather where Country = "'+req.body.country +'"  and length(State) > 0')
   res.end(result[0].values[0][0].toString());
 })  
@@ -153,6 +167,20 @@ app2.post("/getCitiesNS", (req, res) => {
     function (row){output.push(row.City)}
   );
   res.end(JSON.stringify(output));
+}) */
+
+ipcMain.on('get-cities', (event, arg) => {
+  let output = []
+  if (arg.state == null) {
+    db.each('SELECT distinct City from weather WHERE Country = "'+arg.country+'" order by City asc',
+      function (row){output.push(row.City)}
+    );
+  } else {
+    db.each('SELECT distinct City from weather WHERE Country = "'+arg.country+'" and State = "'+arg.state+'" order by City asc',
+      function (row){output.push(row.City)}
+    );
+  }
+  event.sender.send('get-cities-response', JSON.stringify(output))
 })
 
 app2.post("/getWeather", (req, res) => {
@@ -941,8 +969,9 @@ const createWindow = () => {
     height: 875,
     icon: (__dirname + '/images/ballpark.png'),
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js')
-    }
+      nodeIntegration: true,
+      contextIsolation: false 
+  }
   })
 
   // and load the index.html of the app.
@@ -954,7 +983,8 @@ const createWindow = () => {
   });
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+    mainWindow.maximize()
+   mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished

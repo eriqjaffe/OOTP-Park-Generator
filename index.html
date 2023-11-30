@@ -4,6 +4,7 @@
 <head>
     <title>OOTP Park Generator</title>
     <link rel="icon" type="image/png" href="./images/favicon.png">
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script type="text/javascript" src="./scripts/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="./scripts/spectrum.js"></script>
     <script type="text/javascript" src="./scripts/jquery.browser.min.js"></script>
@@ -13,6 +14,7 @@
     <script type="text/javascript" src="./scripts/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="./scripts/spin.min.js"></script>
     <script>
+        const { ipcRenderer } = require('electron');
         const params = new URLSearchParams(window.location.search)
 		const port = params.get('port')
 
@@ -921,23 +923,7 @@
             $('.upper-canvas').bind('contextmenu', function (e) {
                 return false;
             });
-            $.ajax({
-                url: "http://127.0.0.1:"+port+"/getCountries",
-                type: "GET",
-                success: function(data) {
-                    $("#ballparkCountry").append($('<option>', {
-                        value: '',
-                        text: 'Select a country'
-                    }));
-                    JSON.parse(data).forEach(function (item, index) {
-                        $("#ballparkCountry").append($('<option>', {
-                            value: item,
-                            text: item
-                        }));
-                    });
-                    //$("#ballparkCountry").html(data);
-                }
-            });
+            ipcRenderer.send('get-countries', null)
             $(".button").each(function(e) {
                 $(this).prop("disabled",false);
             })   
@@ -945,6 +931,19 @@
             generateField();
             calculateFactors();
             generateCoordinates();
+        })
+
+        ipcRenderer.on('get-countries-response', (event, data) => {
+            $("#ballparkCountry").append($('<option>', {
+                value: '',
+                text: 'Select a country'
+            }));
+            JSON.parse(data).forEach(function (item, index) {
+                $("#ballparkCountry").append($('<option>', {
+                    value: item,
+                    text: item
+                }));
+            });
         })
 
         $("#templateDownload").on("click",function(e) {
@@ -1143,93 +1142,49 @@
         })
 
         $('#ballparkCountry').change(function() {
-            $.ajax({
-                //url: "statecount.php",
-                url: "http://127.0.0.1:"+port+"/stateCount",
-                method: "post",
-                data: {
-                    country: $("#ballparkCountry").val()
-                },
-                success: function(data) {
-                    $("#ballparkState").html("");
-                    if (parseInt(data) > 0) {
-                        $.ajax({
-                            url: "http://127.0.0.1:"+port+"/getStates",
-                            //url: "states.php",
-                            method: "post",
-                            data: {
-                                country: $("#ballparkCountry").val()
-                            },
-                            success: function(data) {
-                                $("#ballparkState").prop("disabled", false);
-                                $("#ballparkCity").prop("disabled", true);
-                                $("#ballparkCity").html("");
-                                $("#ballparkState").append($('<option>', {
-                                    value: "",
-                                    text: "Select a State/Province"
-                                }));
-                                JSON.parse(data).forEach(function (item, index) {;
-                                    $("#ballparkState").append($('<option>', {
-                                        value: item,
-                                        text: item
-                                    }));
-                                });
-                            }
-                        })
-                    } else {
-                        $("#ballparkState").html("");
-                        $("#ballparkCity").html("");
-                        $("#ballparkState").prop("disabled", true);
-                        $.ajax({
-                            url: "http://127.0.0.1:"+port+"/getCitiesNS",
-                            //url: "cities2.php",
-                            method: "post",
-                            data: {
-                                country: $("#ballparkCountry").val()
-                            },
-                            success: function(data) {
-                                $("#ballparkCity").prop("disabled", false);
-                                $("#ballparkCity").append($('<option>', {
-                                    value: "",
-                                    text: "Select a City"
-                                }));
-                                JSON.parse(data).forEach(function (item, index) {;
-                                    $("#ballparkCity").append($('<option>', {
-                                        value: item,
-                                        text: item
-                                    }));
-                                });
-                            }
-                        })
-                    }
-                }
-            })
+            ipcRenderer.send('get-states',{country: $("#ballparkCountry").val()})
+        })
+
+        ipcRenderer.on('get-states-response', (event, data) => {
+            if (data.count < 1) {
+                $("#ballparkState").html("");
+                $("#ballparkCity").html("");
+                $("#ballparkState").prop("disabled", true);
+                ipcRenderer.send('get-cities', {country: $("#ballparkCountry").val(), state: null})
+            } else {
+                $("#ballparkState").prop("disabled", false);
+                $("#ballparkCity").prop("disabled", true);
+                $("#ballparkCity").html("");
+                $("#ballparkState").append($('<option>', {
+                    value: "",
+                    text: "Select a State/Province"
+                }));
+                JSON.parse(data.states).forEach(function (item, index) {;
+                    $("#ballparkState").append($('<option>', {
+                        value: item,
+                        text: item
+                    }));
+                });
+            }
         })
 
         $('#ballparkState').change(function() {
             $("#ballparkCity").html("");
-            $.ajax({
-                url: "http://127.0.0.1:"+port+"/getCities",
-                //url: "cities.php",
-                method: "post",
-                data: {
-                    country: $("#ballparkCountry").val(),
-                    state: $("#ballparkState").val()
-                },
-                success: function(data) {
-                    $("#ballparkCity").prop("disabled", false);
-                    $("#ballparkCity").append($('<option>', {
-                        value: "",
-                        text: "Select a City"
-                    }));
-                    JSON.parse(data).forEach(function (item, index) {;
-                        $("#ballparkCity").append($('<option>', {
-                            value: item,
-                            text: item
-                        }));
-                    });
-                }
-            })
+            ipcRenderer.send('get-cities', {country: $("#ballparkCountry").val(), state: $("#ballparkState").val()})
+        })
+
+        ipcRenderer.on('get-cities-response', (event, data) => {
+            $("#ballparkCity").prop("disabled", false);
+            $("#ballparkCity").append($('<option>', {
+                value: "",
+                text: "Select a City"
+            }));
+            JSON.parse(data).forEach(function (item, index) {;
+                $("#ballparkCity").append($('<option>', {
+                    value: item,
+                    text: item
+                }));
+            });
         })
 
         $('#ballparkCity').change(function() {;
