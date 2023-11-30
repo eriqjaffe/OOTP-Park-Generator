@@ -1193,51 +1193,38 @@
             } else {
                 state = $("#ballparkState").val();
             }
-            $.ajax({
-                url: "http://127.0.0.1:"+port+"/getWeather",
-                //url: "getweather.php",
-                method: "post",
-                data: {
-                    country: $("#ballparkCountry").val(),
-                    state: state,
-                    city: $("#ballparkCity").val()
-                },
-                dataType: "json",
-                success: function(data) {
-                    $("#ballparkAltitude").val(data[0].Altitude);
-                    $("#JanRain").val(data[0].JanRain);
-                    $("#FebRain").val(data[0].FebRain);
-                    $("#MarRain").val(data[0].MarRain);
-                    $("#AprRain").val(data[0].AprRain);
-                    $("#MayRain").val(data[0].MayRain);
-                    $("#JunRain").val(data[0].JunRain);
-                    $("#JulRain").val(data[0].JulRain);
-                    $("#AugRain").val(data[0].AugRain);
-                    $("#SepRain").val(data[0].SepRain);
-                    $("#OctRain").val(data[0].OctRain);
-                    $("#NovRain").val(data[0].NovRain);
-                    $("#DecRain").val(data[0].DecRain);
-                    $("#JanTemp").val(data[0].JanTemp);
-                    $("#FebTemp").val(data[0].FebTemp);
-                    $("#MarTemp").val(data[0].MarTemp);
-                    $("#AprTemp").val(data[0].AprTemp);
-                    $("#MayTemp").val(data[0].MayTemp);
-                    $("#JunTemp").val(data[0].JunTemp);
-                    $("#JulTemp").val(data[0].JulTemp);
-                    $("#AugTemp").val(data[0].AugTemp);
-                    $("#SepTemp").val(data[0].SepTemp);
-                    $("#OctTemp").val(data[0].OctTemp);
-                    $("#NovTemp").val(data[0].NovTemp);
-                    $("#DecTemp").val(data[0].DecTemp);
-                    $("#avgWind").val(data[0].AverageWind);
-                    calculateWeather();
-                },
-                error: function(data) {
-                    alert(data.responseText);
-                }
-            })
+            ipcRenderer.send('get-weather', {country: $("#ballparkCountry").val(), state: $("#ballparkState").val(), city: $("#ballparkCity").val() })
         })
 
+        ipcRenderer.on('get-weather-response', (event, data) => {
+            $("#ballparkAltitude").val(data[0].Altitude);
+            $("#JanRain").val(data[0].JanRain);
+            $("#FebRain").val(data[0].FebRain);
+            $("#MarRain").val(data[0].MarRain);
+            $("#AprRain").val(data[0].AprRain);
+            $("#MayRain").val(data[0].MayRain);
+            $("#JunRain").val(data[0].JunRain);
+            $("#JulRain").val(data[0].JulRain);
+            $("#AugRain").val(data[0].AugRain);
+            $("#SepRain").val(data[0].SepRain);
+            $("#OctRain").val(data[0].OctRain);
+            $("#NovRain").val(data[0].NovRain);
+            $("#DecRain").val(data[0].DecRain);
+            $("#JanTemp").val(data[0].JanTemp);
+            $("#FebTemp").val(data[0].FebTemp);
+            $("#MarTemp").val(data[0].MarTemp);
+            $("#AprTemp").val(data[0].AprTemp);
+            $("#MayTemp").val(data[0].MayTemp);
+            $("#JunTemp").val(data[0].JunTemp);
+            $("#JulTemp").val(data[0].JulTemp);
+            $("#AugTemp").val(data[0].AugTemp);
+            $("#SepTemp").val(data[0].SepTemp);
+            $("#OctTemp").val(data[0].OctTemp);
+            $("#NovTemp").val(data[0].NovTemp);
+            $("#DecTemp").val(data[0].DecTemp);
+            $("#avgWind").val(data[0].AverageWind);
+            calculateWeather();
+        })
         $("#ballparkType").on("change", function() {
             if ($("#playerCoordSelect").val().indexOf("broadcast") > -1) {
                 if ($("#ballparkType").val() == "3") {

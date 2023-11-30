@@ -132,43 +132,6 @@ ipcMain.on('get-states', (event, arg) => {
   }
 })
 
-/* app2.post("/stateCount", (req, res) => {
-  var result = db.exec('SELECT count(State) as count from weather where Country = "'+req.body.country +'"  and length(State) > 0')
-  res.end(result[0].values[0][0].toString());
-})  
-
-app2.post("/getStates", (req, res) => {
-  var output = [];
-  db.each('SELECT distinct State from weather WHERE Country = "'+req.body.country+'" order by Country asc',
-    function (row){output.push(row.State)}
-  );
-  res.end(JSON.stringify(output));
-})
-
-app2.get("/getStates", (req, res) => {
-  var output = [];
-  db.each('SELECT distinct State from weather WHERE Country = "United States of America" order by Country asc',
-    function (row){output.push(row.State)}
-  );
-  res.end(JSON.stringify(output));
-})
-
-app2.post("/getCities", (req, res) => {
-  var output = [];
-  db.each('SELECT distinct City from weather WHERE Country = "'+req.body.country+'" and State = "'+req.body.state+'" order by City asc',
-    function (row){output.push(row.City)}
-  );
-  res.end(JSON.stringify(output));
-})
-
-app2.post("/getCitiesNS", (req, res) => {
-  var output = [];
-  db.each('SELECT distinct City from weather WHERE Country = "'+req.body.country+'" order by City asc',
-    function (row){output.push(row.City)}
-  );
-  res.end(JSON.stringify(output));
-}) */
-
 ipcMain.on('get-cities', (event, arg) => {
   let output = []
   if (arg.state == null) {
@@ -183,18 +146,18 @@ ipcMain.on('get-cities', (event, arg) => {
   event.sender.send('get-cities-response', JSON.stringify(output))
 })
 
-app2.post("/getWeather", (req, res) => {
-  var output = [];
-  var sql = '';
-  if (req.body.state == "is null") {
-    sql = 'select * from weather where City = "'+req.body.city+'" and Country = "'+req.body.country+'"'
+ipcMain.on('get-weather', (event, arg) => {
+  let output = []
+  let sql
+  if (arg.state == null) {
+    sql = 'select * from weather where City = "'+arg.city+'" and Country = "'+arg.country+'"'
   } else {
-    sql = 'select * from weather where City = "'+req.body.city+'" and State = "'+req.body.state+'" and Country = "'+req.body.country+'"'
+    sql = 'select * from weather where City = "'+arg.city+'" and State = "'+arg.state+'" and Country = "'+arg.country+'"'
   }
   db.each(sql,
     function (row){output.push(row)}
   );
-  res.end(JSON.stringify(output));
+  event.sender.send('get-weather-response', output);
 })
 
 app2.get("/randomName", (req, res) => {
