@@ -1,5 +1,6 @@
 {
   "name": "parkgen",
+  "productName": "OOTP Park Generator",
   "version": "0.1.2",
   "description": "OOTP Park Generator",
   "main": "main.js",
@@ -28,9 +29,11 @@
     "mac": {
       "category": "public.app-category.utilities",
       "target": [
-        "zip",
         "dmg"
       ]
+    },
+    "dmg": {
+      "writeUpdateInfo": false
     },
     "win": {
       "target": [
@@ -52,19 +55,19 @@
       "include": "build/installer.nsh",
       "uninstallDisplayName": "${productName} ${version}",
       "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico"
+      "uninstallerIcon": "build/icon.ico",
+      "differentialPackage": false
     },
     "linux": {
       "target": [
         "deb",
-        "rpm",
-        "tar.gz"
+        "rpm"
       ]
     },
     "deb": {}
   },
   "devDependencies": {
-    "electron": "^17.1.0",
-    "electron-builder": "^22.14.5"
+    "electron": "^27.1.2",
+    "electron-builder": "^24.9.1"
   }
 }
