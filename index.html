@@ -948,13 +948,7 @@
 
         $("#templateDownload").on("click",function(e) {
             e.preventDefault;
-            $.ajax({
-                url: "http://127.0.0.1:"+port+"/getTemplate",
-                type: "GET",
-                success: function(data) {
-
-                }
-            })
+            ipcRenderer.send('get-template', null)
         })
         
         $(".recalculate, .number, .weather").keydown(function(event) {
@@ -1225,6 +1219,7 @@
             $("#avgWind").val(data[0].AverageWind);
             calculateWeather();
         })
+
         $("#ballparkType").on("change", function() {
             if ($("#playerCoordSelect").val().indexOf("broadcast") > -1) {
                 if ($("#ballparkType").val() == "3") {
@@ -1338,245 +1333,227 @@
         })
 
         $("#randomPark").on("click", function() {
-            var state;
-            var city;
-            $.ajax({
-                type: "GET",
-                url: "http://127.0.0.1:"+port+"/randomName",
-                success: function(data) {
-                    $("#ballparkName").val(data);
-                },
-                error: function(data) {
-                    alert(data);
+            $(".randomizer").each(function() {
+                var options = $(this).children('option');
+                var random = Math.floor(options.length * (Math.random() % 1));
+                if ($(this).attr("id") == "mow_pattern") {
+                    while (random == 15) {
+                        var random = Math.floor(options.length * (Math.random() % 1));
+                    }
                 }
-            });
-            $.ajax({
-                type: "GET",
-                url: "http://127.0.0.1:"+port+"/randomCity",
-                dataType: "json",
-                success: function(data) {
-                    $("#ballparkAltitude").val(data.Altitude);
-                    $("#JanRain").val(data.JanRain);
-                    $("#FebRain").val(data.FebRain);
-                    $("#MarRain").val(data.MarRain);
-                    $("#AprRain").val(data.AprRain);
-                    $("#MayRain").val(data.MayRain);
-                    $("#JunRain").val(data.JunRain);
-                    $("#JulRain").val(data.JulRain);
-                    $("#AugRain").val(data.AugRain);
-                    $("#SepRain").val(data.SepRain);
-                    $("#OctRain").val(data.OctRain);
-                    $("#NovRain").val(data.NovRain);
-                    $("#DecRain").val(data.DecRain);
-                    $("#JanTemp").val(data.JanTemp);
-                    $("#FebTemp").val(data.FebTemp);
-                    $("#MarTemp").val(data.MarTemp);
-                    $("#AprTemp").val(data.AprTemp);
-                    $("#MayTemp").val(data.MayTemp);
-                    $("#JunTemp").val(data.JunTemp);
-                    $("#JulTemp").val(data.JulTemp);
-                    $("#AugTemp").val(data.AugTemp);
-                    $("#SepTemp").val(data.SepTemp);
-                    $("#OctTemp").val(data.OctTemp);
-                    $("#NovTemp").val(data.NovTemp);
-                    $("#DecTemp").val(data.DecTemp);
-                    $("#avgWind").val(data.AverageWind);
-                    state = data.State;
-                    city = data.City;
-                    $.ajax({
-                        url: "http://127.0.0.1:"+port+"/getStates",
-                        method: "GET",
-                        datatype: "json",
-                        success: function(data) {
-                            $("#ballparkState").prop("disabled", false);
-                            $("#ballparkCity").prop("disabled", true);
-                            $("#ballparkCity").html("");
-                            $("#ballparkState").append($('<option>', {
-                                value: "",
-                                text: "Select a State/Province"
-                            }));
-                            JSON.parse(data).forEach(function (item, index) {;
-                                $("#ballparkState").append($('<option>', {
-                                    value: item,
-                                    text: item
-                                }));
-                            });
-                            $.ajax({
-                                url: "http://127.0.0.1:"+port+"/getCities",
-                                method: "post",
-                                data: {
-                                    country: "United States of America",
-                                    state: state
-                                },
-                                success: function(data) {
-                                    $("#ballparkCity").prop("disabled", false);
-                                    $("#ballparkCity").append($('<option>', {
-                                        value: "",
-                                        text: "Select a City"
-                                    }));
-                                    JSON.parse(data).forEach(function (item, index) {;
-                                        $("#ballparkCity").append($('<option>', {
-                                            value: item,
-                                            text: item
-                                        }));
-                                    });
-                                    $("#ballparkCountry").val("United States of America");
-                                    $("#ballparkState").val(state);
-                                    $("#ballparkCity").val(city);
-                                    $(".randomizer").each(function() {
-                                        var options = $(this).children('option');
-                                        var random = Math.floor(options.length * (Math.random() % 1));
-                                        if ($(this).attr("id") == "mow_pattern") {
-                                            while (random == 15) {
-                                                var random = Math.floor(options.length * (Math.random() % 1));
-                                            }
-                                        }
-                                        $(this).find('option')[random].selected = true;
-                                    })
-                                    $("#ballparkCapacity").val(Math.floor(Math.random() * (56000 - 1000 + 1) + 1000));
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 95) {
-                                        var LL = Math.floor(Math.random() * (400 - 360) + 360);
-                                    } else if (random > 90) {
-                                        var LL = Math.floor(Math.random() * (300 - 230) + 230);
-                                    } else {
-                                        var LL = Math.floor(Math.random() * (370 - 290) + 290);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 95) {
-                                        var LF = Math.floor(Math.random() * (415 - 385) + 385);
-                                    } else {
-                                        var LF = Math.floor(Math.random() * (385 - LL) + LL);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 90) {
-                                        var LC = Math.floor(Math.random() * (460 - 420) + 420);
-                                    } else {
-                                        var LC = Math.floor(Math.random() * (410 - LF) + LF);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 95) {
-                                        var RL = Math.floor(Math.random() * (400 - 360) + 360);
-                                    } else if (random > 90) {
-                                        var RL = Math.floor(Math.random() * (300 - 230) + 230);
-                                    } else {
-                                        var RL = Math.floor(Math.random() * (370 - 290) + 290);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 95) {
-                                        var RF = Math.floor(Math.random() * (415 - 385) + 385);
-                                    } else {
-                                        var RF = Math.floor(Math.random() * (385 - RL) + RL);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 90) {
-                                        var RC = Math.floor(Math.random() * (460 - 420) + 420);
-                                    } else {
-                                        var RC = Math.floor(Math.random() * (410 - RF) + RF);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 98) {
-                                        var CF = Math.floor(Math.random() * (480 - 440) + 445);
-                                    } else if (random > 94) {
-                                        var CF = Math.floor(Math.random() * (455 - 420) + 430);
-                                    } else if (random > 86) {
-                                        var CF = Math.floor(Math.random() * (425 - 400) + 400);
-                                    } else if (random > 43) {
-                                        var CF = Math.floor(Math.random() * (410 - RC) + RC);
-                                    } else {
-                                        var CF = Math.floor(Math.random() * (410 - LC) + LC);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 97) {
-                                        var LLW = Math.floor(Math.random() * (60 - 35) + 35);
-                                    } else if (random > 90) {
-                                        var LLW = Math.floor(Math.random() * (35 - 20) + 20);
-                                    } else if (random > 82) {
-                                        var LLW = Math.floor(Math.random() * (20 - 8) + 8);
-                                    } else if (random > 30) {
-                                        var LLW = Math.floor(8 + Math.random() * (4 - 1) + 1);
-                                    } else {
-                                        var LLW = 8;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 97) {
-                                        var RLW = Math.floor(Math.random() * (60 - 35) + 35);
-                                    } else if (random > 90) {
-                                        var RLW = Math.floor(Math.random() * (35 - 20) + 20);
-                                    } else if (random > 82) {
-                                        var RLW = Math.floor(Math.random() * (20 - 8) + 8);
-                                    } else if (random > 30) {
-                                        var RLW = Math.floor(8 + Math.random() * (4 - 1) + 1);
-                                    } else {
-                                        var RLW = 8;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 98) {
-                                        var LFW = Math.floor(LLW + Math.random() * (20 - 1) + 1);
-                                    } else if (random > 96) {
-                                        var LFW = Math.floor(LLW - Math.random() * (20 - 1) + 1);
-                                    } else {
-                                        var LFW = LLW;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 98) {
-                                        var RFW = Math.floor(RLW + Math.random() * (20 - 1) + 1);
-                                    } else if (random > 96) {
-                                        var RFW = Math.floor(RLW - Math.random() * (20 - 1) + 1);
-                                    } else {
-                                        var RFW = RLW;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 35) {
-                                        var LCW = Math.floor(8 + Math.random() * (4 - 1) + 1);
-                                    } else if (random > 30) {
-                                        var LCW = Math.floor(LFW + Math.random() * (10 - 1) + 1);
-                                    } else {
-                                        var LCW = LFW;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 35) {
-                                        var RCW = Math.floor(8 + Math.random() * (4 - 1) + 1);
-                                    } else if (random > 30) {
-                                        var RCW = Math.floor(LFW + Math.random() * (10 - 1) + 1);
-                                    } else {
-                                        var RCW = RFW;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 70) {
-                                        var CFW = RCW;
-                                    } else if (random > 40) {
-                                        var CFW = LCW;
-                                    } else if (random > 3) {
-                                        var CFW = Math.floor((RCW + LCW) / 2);
-                                    } else {
-                                        var CFW = Math.floor(Math.random() * (60 - 8) + 8);
-                                    }
-                                    $("#leftLine").val(LL);
-                                    $("#leftLineWall").val(LLW);
-                                    $("#leftField").val(LF);
-                                    $("#leftFieldWall").val(LFW);
-                                    $("#leftCenter").val(LC);
-                                    $("#leftCenterWall").val(LCW);
-                                    $("#centerField").val(CF);
-                                    $("#centerFieldWall").val(CFW);
-                                    $("#rightLine").val(RL);
-                                    $("#rightLineWall").val(RLW);
-                                    $("#rightField").val(RF);
-                                    $("#rightFieldWall").val(RFW);
-                                    $("#rightCenter").val(RC);
-                                    $("#rightCenterWall").val(RCW);
-                                    calculateWeather();
-                                    calculateFactors();
-                                    generateField();
-                                    generateCoordinates();
-                                    $(".overlay").css("display","none");
-                                }
-                            })
-                        }
-                    })
-                }
+                $(this).find('option')[random].selected = true;
             })
+            $("#ballparkCapacity").val(Math.floor(Math.random() * (56000 - 1000 + 1) + 1000));
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 95) {
+                var LL = Math.floor(Math.random() * (400 - 360) + 360);
+            } else if (random > 90) {
+                var LL = Math.floor(Math.random() * (300 - 230) + 230);
+            } else {
+                var LL = Math.floor(Math.random() * (370 - 290) + 290);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 95) {
+                var LF = Math.floor(Math.random() * (415 - 385) + 385);
+            } else {
+                var LF = Math.floor(Math.random() * (385 - LL) + LL);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 90) {
+                var LC = Math.floor(Math.random() * (460 - 420) + 420);
+            } else {
+                var LC = Math.floor(Math.random() * (410 - LF) + LF);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 95) {
+                var RL = Math.floor(Math.random() * (400 - 360) + 360);
+            } else if (random > 90) {
+                var RL = Math.floor(Math.random() * (300 - 230) + 230);
+            } else {
+                var RL = Math.floor(Math.random() * (370 - 290) + 290);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 95) {
+                var RF = Math.floor(Math.random() * (415 - 385) + 385);
+            } else {
+                var RF = Math.floor(Math.random() * (385 - RL) + RL);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 90) {
+                var RC = Math.floor(Math.random() * (460 - 420) + 420);
+            } else {
+                var RC = Math.floor(Math.random() * (410 - RF) + RF);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 98) {
+                var CF = Math.floor(Math.random() * (480 - 440) + 445);
+            } else if (random > 94) {
+                var CF = Math.floor(Math.random() * (455 - 420) + 430);
+            } else if (random > 86) {
+                var CF = Math.floor(Math.random() * (425 - 400) + 400);
+            } else if (random > 43) {
+                var CF = Math.floor(Math.random() * (410 - RC) + RC);
+            } else {
+                var CF = Math.floor(Math.random() * (410 - LC) + LC);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 97) {
+                var LLW = Math.floor(Math.random() * (60 - 35) + 35);
+            } else if (random > 90) {
+                var LLW = Math.floor(Math.random() * (35 - 20) + 20);
+            } else if (random > 82) {
+                var LLW = Math.floor(Math.random() * (20 - 8) + 8);
+            } else if (random > 30) {
+                var LLW = Math.floor(8 + Math.random() * (4 - 1) + 1);
+            } else {
+                var LLW = 8;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 97) {
+                var RLW = Math.floor(Math.random() * (60 - 35) + 35);
+            } else if (random > 90) {
+                var RLW = Math.floor(Math.random() * (35 - 20) + 20);
+            } else if (random > 82) {
+                var RLW = Math.floor(Math.random() * (20 - 8) + 8);
+            } else if (random > 30) {
+                var RLW = Math.floor(8 + Math.random() * (4 - 1) + 1);
+            } else {
+                var RLW = 8;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 98) {
+                var LFW = Math.floor(LLW + Math.random() * (20 - 1) + 1);
+            } else if (random > 96) {
+                var LFW = Math.floor(LLW - Math.random() * (20 - 1) + 1);
+            } else {
+                var LFW = LLW;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 98) {
+                var RFW = Math.floor(RLW + Math.random() * (20 - 1) + 1);
+            } else if (random > 96) {
+                var RFW = Math.floor(RLW - Math.random() * (20 - 1) + 1);
+            } else {
+                var RFW = RLW;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 35) {
+                var LCW = Math.floor(8 + Math.random() * (4 - 1) + 1);
+            } else if (random > 30) {
+                var LCW = Math.floor(LFW + Math.random() * (10 - 1) + 1);
+            } else {
+                var LCW = LFW;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 35) {
+                var RCW = Math.floor(8 + Math.random() * (4 - 1) + 1);
+            } else if (random > 30) {
+                var RCW = Math.floor(LFW + Math.random() * (10 - 1) + 1);
+            } else {
+                var RCW = RFW;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 70) {
+                var CFW = RCW;
+            } else if (random > 40) {
+                var CFW = LCW;
+            } else if (random > 3) {
+                var CFW = Math.floor((RCW + LCW) / 2);
+            } else {
+                var CFW = Math.floor(Math.random() * (60 - 8) + 8);
+            }
+            $("#leftLine").val(LL);
+            $("#leftLineWall").val(LLW);
+            $("#leftField").val(LF);
+            $("#leftFieldWall").val(LFW);
+            $("#leftCenter").val(LC);
+            $("#leftCenterWall").val(LCW);
+            $("#centerField").val(CF);
+            $("#centerFieldWall").val(CFW);
+            $("#rightLine").val(RL);
+            $("#rightLineWall").val(RLW);
+            $("#rightField").val(RF);
+            $("#rightFieldWall").val(RFW);
+            $("#rightCenter").val(RC);
+            $("#rightCenterWall").val(RCW);
+            generateField();
+            generateCoordinates();
+            $(".overlay").css("display","none");
+            ipcRenderer.send('random-park', null)
+        })
+
+        ipcRenderer.on('random-park-response', (event, data) => {
+            $("#ballparkName").val(data.parkName)
+            $("#ballparkCountry").html("")
+            $("#ballparkState").html("")
+            $("#ballparkCity").html("")
+            $("#ballparkCountry").append($('<option>', {
+                value: '',
+                text: 'Select a country'
+            }));
+            $("#ballparkState").append($('<option>', {
+                value: '',
+                text: 'Select a state'
+            }));
+            $("#ballparkCity").append($('<option>', {
+                value: '',
+                text: 'Select a city'
+            }));
+            $("#ballparkCountry").append($('<option>', {
+                value: 'United States of America',
+                text: 'United States of America'
+            }));
+            for (country of data.countries) {
+                $("#ballparkCountry").append($('<option>', {
+                    value: country,
+                    text: country
+                }))
+            }
+            for (state of data.states) {
+                $("#ballparkState").append($('<option>', {
+                    value: state,
+                    text: state
+                }))
+            }
+            for (city of data.cities) {
+                $("#ballparkCity").append($('<option>', {
+                    value: city,
+                    text: city
+                }))
+            }
+            $("#ballparkState").prop("disabled",false);
+            $("#ballparkCity").prop("disabled",false);
+            $("#ballparkCountry").val("United States of America")
+            $("#ballparkState").val(data.city.State)
+            $("#ballparkCity").val(data.city.City)
+            $("#ballparkAltitude").val(data.city.Altitude);
+            $("#JanRain").val(data.city.JanRain);
+            $("#FebRain").val(data.city.FebRain);
+            $("#MarRain").val(data.city.MarRain);
+            $("#AprRain").val(data.city.AprRain);
+            $("#MayRain").val(data.city.MayRain);
+            $("#JunRain").val(data.city.JunRain);
+            $("#JulRain").val(data.city.JulRain);
+            $("#AugRain").val(data.city.AugRain);
+            $("#SepRain").val(data.city.SepRain);
+            $("#OctRain").val(data.city.OctRain);
+            $("#NovRain").val(data.city.NovRain);
+            $("#DecRain").val(data.city.DecRain);
+            $("#JanTemp").val(data.city.JanTemp);
+            $("#FebTemp").val(data.city.FebTemp);
+            $("#MarTemp").val(data.city.MarTemp);
+            $("#AprTemp").val(data.city.AprTemp);
+            $("#MayTemp").val(data.city.MayTemp);
+            $("#JunTemp").val(data.city.JunTemp);
+            $("#JulTemp").val(data.city.JulTemp);
+            $("#AugTemp").val(data.city.AugTemp);
+            $("#SepTemp").val(data.city.SepTemp);
+            $("#OctTemp").val(data.city.OctTemp);
+            $("#NovTemp").val(data.city.NovTemp);
+            $("#DecTemp").val(data.city.DecTemp);
+            $("#avgWind").val(data.city.AverageWind);
+            calculateWeather();
+            calculateFactors();
         })
 
         function generateField() {
@@ -2570,30 +2547,45 @@
         }
 
         function calculateFactors() {
-            $.ajax({
-                type: "POST",
-                url: "http://127.0.0.1:"+port+"/calculateFactors",
-                data: $("#ballparkInformation").serialize(),
-                dataType: "json",
-                success: function(data) {
-                    $("#avgLHB").html("<b>" + data.avgLHB + "</b>");
-                    $("#avgLHBform").val(data.avgLHB);
-                    $("#avgRHB").html("<b>" + data.avgRHB + "</b>");
-                    $("#avgRHBform").val(data.avgRHB);
-                    $("#doubles").html("<b>" + data.doubles + "</b>");
-                    $("#doublesform").val(data.doubles);
-                    $("#triples").html("<b>" + data.triples + "</b>");
-                    $("#triplesform").val(data.triples);
-                    $("#hrLHB").html("<b>" + data.hrLHB + "</b>");
-                    $("#hrLHBform").val(data.hrLHB);
-                    $("#hrRHB").html("<b>" + data.hrRHB + "</b>");
-                    $("#hrRHBform").val(data.hrRHB);
-                },
-                error: function(data) {
-                    $("#ballparkFactorDiv").html(data);
-                }
-            });
+            ipcRenderer.send('calculate-factors', {
+                ballparkType: parseInt($("#ballparkType").val()),
+                ballparkSurface: $("#ballparkSurface").val(),
+                ballparkFoulArea: parseInt($("#ballparkFoulArea").val()),
+                ballparkAltitude: parseInt($("#ballparkAltitude").val()),
+                leftLine: parseInt($("#leftLine").val()),
+                leftField: parseInt($("#leftField").val()),
+                leftCenter: parseInt($("#leftCenter").val()),
+                centerField: parseInt($("#centerField").val()),
+                rightCenter: parseInt($("#rightCenter").val()),
+                rightField: parseInt($("#rightField").val()),
+                rightLine: parseInt($("#rightLine").val()),
+                leftLineWall: parseInt($("#leftLineWall").val()),
+                leftFieldWall: parseInt($("#leftFieldWall").val()),
+                leftCenterWall: parseInt($("#leftCenterWall").val()),
+                centerFieldWall: parseInt($("#centerFieldWall").val()),
+                rightCenterWall: parseInt($("#rightCenterWall").val()),
+                rightFieldWall: parseInt($("#rightFieldWall").val()),
+                rightLineWall:parseInt($("#rightLineWall").val()),
+                carL: parseInt($("#carL").val()),
+                carC: parseInt($("#carC").val()),
+                carR: parseInt($("#carR").val())
+            })
         }
+
+        ipcRenderer.on('calculate-factors-response', (event, data) => {
+            $("#avgLHB").html(data.avgLHB);
+            $("#avgLHBform").val(data.avgLHB);
+            $("#avgRHB").html(data.avgRHB);
+            $("#avgRHBform").val(data.avgRHB);
+            $("#doubles").html(data.doubles);
+            $("#doublesform").val(data.doubles);
+            $("#triples").html(data.triples);
+            $("#triplesform").val(data.triples);
+            $("#hrLHB").html(data.hrLHB);
+            $("#hrLHBform").val(data.hrLHB);
+            $("#hrRHB").html(data.hrRHB);
+            $("#hrRHBform").val(data.hrRHB);
+        })
         
 /*         $("#downloadPark").on("click",function(e) {
             e.preventDefault();
@@ -2678,10 +2670,10 @@
             var exportCanvas = document.getElementById("final");
             var dataURL = exportCanvas.toDataURL({format:"png"});
             dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();  
-            $("#ballparkInformation").attr("method","post");
-            $("#ballparkInformation").attr("target","_blank");
+            //$("#ballparkInformation").attr("method","post");
+            //$("#ballparkInformation").attr("target","_blank");
             //$("#ballparkInformation").attr("action","packagepark2.php");
-            $("#ballparkInformation").attr("action","http://127.0.0.1:"+port+"/downloadBallpark");
+            //$("#ballparkInformation").attr("action","http://127.0.0.1:"+port+"/downloadBallpark");
             switch ($("#playerCoordSelect").val()) {
                 case "broadcastPlayers":
                     broadcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
@@ -2709,7 +2701,9 @@
             })
             fieldOptionItems[$("#onDeckCirclesItem").attr("id")] = $("#onDeckCirclesItem").is(':visible');
             $("#fieldOptionItems").val(JSON.stringify(fieldOptionItems));
-            $("#ballparkInformation").submit();
+            //$("#ballparkInformation").submit();
+            //console.log(convertFormToJSON($("#ballparkInformation")))
+            ipcRenderer.send('save-ballpark',convertFormToJSON($("#ballparkInformation")))
         })
         
         document.getElementById('uploadedImg').onchange = function handleImage(e) {
@@ -3639,5 +3633,15 @@
             
             image.src = url;
         }
+
+        function convertFormToJSON(form) {
+            return $(form)
+            .serializeArray()
+            .reduce(function (json, { name, value }) {
+                json[name] = value;
+                return json;
+            }, {});
+        }
+
     </script>
 </html>
