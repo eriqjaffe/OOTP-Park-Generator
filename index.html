@@ -14,6 +14,7 @@
     <script type="text/javascript" src="./scripts/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="./scripts/spin.min.js"></script>
     <script>
+        require('./renderer.js')
         const { ipcRenderer } = require('electron');
         const params = new URLSearchParams(window.location.search)
 		const port = params.get('port')
@@ -62,7 +63,7 @@
                         <td style="width:33%;">Park Name:</td>
                         <td style="width:66%;">
                             <span id="tb_cont">
-                                <input name="ballparkName" id="ballparkName" type="text" placeholder="Unnamed Ballpark"></input>
+                                <input name="ballparkName" id="ballparkName" type="text" placeholder="Unnamed Ballpark"/>
                                 <span title="Generate A Random Park Name"id="randomName"></span>
                             </span>
                             
@@ -131,13 +132,13 @@
         <tr>
             <td style="width:33%;">Altitude:</td>
             <td style="width:66%;">
-                <input class="recalculate center genericNumber" id="ballparkAltitude" name="ballparkAltitude" type="number" value="0"></input>
+                <input class="recalculate center genericNumber" id="ballparkAltitude" name="ballparkAltitude" type="number" value="0"/>
             </td>
         </tr>
         <tr>
             <td style="width:33%;">Capacity:</td>
             <td style="width:66%;">
-                <input class="number center genericNumber" id="ballparkCapacity" name="ballparkCapacity" type="number" value="42880"></input>
+                <input class="number center genericNumber" id="ballparkCapacity" name="ballparkCapacity" type="number" value="42880"/>
             </td>
         </tr>
         </table>
@@ -156,10 +157,10 @@
                         <label>Left Field Line:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="leftLine" name="leftLine" type="number" value="330" style="width:99%;" data-location="Left Field Line"></input>
+                        <input class="regenerate recalculate center distance" id="leftLine" name="leftLine" type="number" value="330" style="width:99%;" data-location="Left Field Line"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="leftLineWall" name="leftLineWall" type="number" value="11" style="width:99%;" data-location="Left Field Line"></input>
+                        <input class="recalculate center height" id="leftLineWall" name="leftLineWall" type="number" value="11" style="width:99%;" data-location="Left Field Line"/>
                     </td>
                 </tr>
                 <tr>
@@ -167,10 +168,10 @@
                         <label>Left Field:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="leftField" name="leftField" type="number" value="360" style="width:99%;" data-location="Left Field"></input>
+                        <input class="regenerate recalculate center distance" id="leftField" name="leftField" type="number" value="360" style="width:99%;" data-location="Left Field"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="leftFieldWall" name="leftFieldWall" type="number" value="11" style="width:99%;" data-location="Left Field"></input>
+                        <input class="recalculate center height" id="leftFieldWall" name="leftFieldWall" type="number" value="11" style="width:99%;" data-location="Left Field"/>
                     </td>
                 </tr>
                 <tr>
@@ -178,10 +179,10 @@
                         <label>Left Center:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="leftCenter" name="leftCenter" type="number" value="390" style="width:99%;" data-location="Left Center"></input>
+                        <input class="regenerate recalculate center distance" id="leftCenter" name="leftCenter" type="number" value="390" style="width:99%;" data-location="Left Center"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="leftCenterWall" name="leftCenterWall" type="number" value="11" style="width:99%;" data-location="Left Center"></input>
+                        <input class="recalculate center height" id="leftCenterWall" name="leftCenterWall" type="number" value="11" style="width:99%;" data-location="Left Center"/>
                     </td>
                 </tr>
                 <tr>
@@ -189,10 +190,10 @@
                         <label>Center Field:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="centerField" name="centerField" type="number" value="405" style="width:99%;" data-location="Center Field"></input>
+                        <input class="regenerate recalculate center distance" id="centerField" name="centerField" type="number" value="405" style="width:99%;" data-location="Center Field"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="centerFieldWall" name="centerFieldWall" type="number" value="11" style="width:99%;" data-location="Center Field"></input>
+                        <input class="recalculate center height" id="centerFieldWall" name="centerFieldWall" type="number" value="11" style="width:99%;" data-location="Center Field"/>
                     </td>
                 </tr>
                 <tr>
@@ -200,7 +201,7 @@
                         <label>Right Center:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="rightCenter" name="rightCenter" type="number" value="390" style="width:99%;" data-location="Right Center"></input>
+                        <input class="regenerate recalculate center distance" id="rightCenter" name="rightCenter" type="number" value="390" style="width:99%;" data-location="Right Center"/>
                     </td>
                     <td style="width:33%;">
                         <input class="recalculate center height" id="rightCenterWall" name="rightCenterWall" type="number" value="11" style="width:99%;" data-location="Right Center"</input>
@@ -211,10 +212,10 @@
                         <label>Right Field:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="rightField" name="rightField" type="number" value="360" style="width:99%;" data-location="Right Field"></input>
+                        <input class="regenerate recalculate center distance" id="rightField" name="rightField" type="number" value="360" style="width:99%;" data-location="Right Field"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="rightFieldWall" name="rightFieldWall" type="number" value="11" style="width:99%;" data-location="Right Field"></input>
+                        <input class="recalculate center height" id="rightFieldWall" name="rightFieldWall" type="number" value="11" style="width:99%;" data-location="Right Field"/>
                     </td>
                 </tr>
                 <tr>
@@ -222,10 +223,10 @@
                         <label>Right Field Line:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="rightLine" name="rightLine" type="number" value="330" style="width:99%;" data-location="Right Field Line"></input>
+                        <input class="regenerate recalculate center distance" id="rightLine" name="rightLine" type="number" value="330" style="width:99%;" data-location="Right Field Line"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="rightLineWall" name="rightLineWall" type="number" value="11" style="width:99%;" data-location="Right Field Line"></input>
+                        <input class="recalculate center height" id="rightLineWall" name="rightLineWall" type="number" value="11" style="width:99%;" data-location="Right Field Line"/>
                     </td>
                 </tr>
             </table>
@@ -240,12 +241,10 @@
                 <input class="button" type="button" id="flipPark" value="Flip Ballpark">
             </div>
             <div class="formItem">
-                <input type="file" id="uploadedPattern" accept="image/png" style="display:none;"/>
-                <input class="button addMowPattern" type="button" value="Upload Mow Pattern" onclick="document.getElementById('uploadedPattern').click();">
+                <input class="button addMowPattern" id="addPattern" type="button" value="Add Mow Pattern">
             </div>
             <div class="formItem">
-                <input type="file" id="uploadedImg" accept="image/*" style="display:none;"/>
-                <input class="button" type="button" id="addImage" value="Add Field Image" onclick="document.getElementById('uploadedImg').click();">
+                <input class="button" type="button" id="addImage" value="Add Field Image">
             </div>
             <div class="formItem">
                 <input class="button" type="button" id="showPlayers" value="Edit Player & Ball Locations">
@@ -527,10 +526,10 @@
                                 <label>January:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="JanTemp" id="JanTemp" type="number" value="57" style="width:99%;" data-month="January"></input>
+                                <input class="weather temperature" name="JanTemp" id="JanTemp" type="number" value="57" style="width:99%;" data-month="January"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="JanRain" id="JanRain" type="number" value="2" style="width:99%;" data-month="January"></input>
+                                <input class="weather rain" name="JanRain" id="JanRain" type="number" value="2" style="width:99%;" data-month="January"/>
                             </td>
                         </tr>
                         <tr>
@@ -538,10 +537,10 @@
                                 <label>February:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="FebTemp" id="FebTemp" type="number" value="58" style="width:99%;" data-month="February"></input>
+                                <input class="weather temperature" name="FebTemp" id="FebTemp" type="number" value="58" style="width:99%;" data-month="February"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="FebRain" id="FebRain" type="number" value="3" style="width:99%;" data-month="February"></input>
+                                <input class="weather rain" name="FebRain" id="FebRain" type="number" value="3" style="width:99%;" data-month="February"/>
                             </td>
                         </tr>
                         <tr>
@@ -549,10 +548,10 @@
                                 <label>March:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="MarTemp" id="MarTemp" type="number" value="58" style="width:99%;" data-month="March"></input>
+                                <input class="weather temperature" name="MarTemp" id="MarTemp" type="number" value="58" style="width:99%;" data-month="March"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="MarRain" id="MarRain" type="number" value="3" style="width:99%;" data-month="March"></input>
+                                <input class="weather rain" name="MarRain" id="MarRain" type="number" value="3" style="width:99%;" data-month="March"/>
                             </td>
                         </tr>
                         <tr>
@@ -560,10 +559,10 @@
                                 <label>April:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="AprTemp" id="AprTemp" type="number" value="61" style="width:99%;" data-month="April"></input>
+                                <input class="weather temperature" name="AprTemp" id="AprTemp" type="number" value="61" style="width:99%;" data-month="April"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="AprRain" id="AprRain" type="number" value="1" style="width:99%;" data-month="April"></input>
+                                <input class="weather rain" name="AprRain" id="AprRain" type="number" value="1" style="width:99%;" data-month="April"/>
                             </td>
                         </tr>
                         <tr>
@@ -571,10 +570,10 @@
                                 <label>May:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="MayTemp" id="MayTemp" type="number" value="63" style="width:99%;" data-month="May"></input>
+                                <input class="weather temperature" name="MayTemp" id="MayTemp" type="number" value="63" style="width:99%;" data-month="May"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="MayRain" id="MayRain" type="number" value="0" style="width:99%;" data-month="May"></input>
+                                <input class="weather rain" name="MayRain" id="MayRain" type="number" value="0" style="width:99%;" data-month="May"/>
                             </td>
                         </tr>
                         <tr>
@@ -582,10 +581,10 @@
                                 <label>June:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="JunTemp" id="JunTemp" type="number" value="66" style="width:99%;" data-month="June"></input>
+                                <input class="weather temperature" name="JunTemp" id="JunTemp" type="number" value="66" style="width:99%;" data-month="June"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="JunRain" id="JunRain" type="number" value="0" style="width:99%;" data-month="June"></input>
+                                <input class="weather rain" name="JunRain" id="JunRain" type="number" value="0" style="width:99%;" data-month="June"/>
                             </td>
                         </tr>
                         <tr>
@@ -593,10 +592,10 @@
                                 <label>July:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="JulTemp" id="JulTemp" type="number" value="69" style="width:99%;" data-month="July"></input>
+                                <input class="weather temperature" name="JulTemp" id="JulTemp" type="number" value="69" style="width:99%;" data-month="July"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="JulRain" id="JulRain" type="number" value="0" style="width:99%;" data-month="July"></input>
+                                <input class="weather rain" name="JulRain" id="JulRain" type="number" value="0" style="width:99%;" data-month="July"/>
                             </td>
                         </tr>
                         <tr>
@@ -604,10 +603,10 @@
                                 <label>August:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="AugTemp" id="AugTemp" type="number" value="71" style="width:99%;" data-month="August"></input>
+                                <input class="weather temperature" name="AugTemp" id="AugTemp" type="number" value="71" style="width:99%;" data-month="August"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="AugRain" id="AugRain" type="number" value="0" style="width:99%;" data-month="August"></input>
+                                <input class="weather rain" name="AugRain" id="AugRain" type="number" value="0" style="width:99%;" data-month="August"/>
                             </td>
                         </tr>
                         <tr>
@@ -615,10 +614,10 @@
                                 <label>September:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="SepTemp" id="SepTemp" type="number" value="70" style="width:99%;" data-month="September"></input>
+                                <input class="weather temperature" name="SepTemp" id="SepTemp" type="number" value="70" style="width:99%;" data-month="September"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="SepRain" id="SepRain" type="number" value="1" style="width:99%;" data-month="September"></input>
+                                <input class="weather rain" name="SepRain" id="SepRain" type="number" value="1" style="width:99%;" data-month="September"/>
                             </td>
                         </tr>
                         <tr>
@@ -626,10 +625,10 @@
                                 <label>October:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="OctTemp" id="OctTemp" type="number" value="67" style="width:99%;" data-month="October"></input>
+                                <input class="weather temperature" name="OctTemp" id="OctTemp" type="number" value="67" style="width:99%;" data-month="October"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="OctRain" id="OctRain" type="number" value="1" style="width:99%;" data-month="October"></input>
+                                <input class="weather rain" name="OctRain" id="OctRain" type="number" value="1" style="width:99%;" data-month="October"/>
                             </td>
                         </tr>
                         <tr>
@@ -637,10 +636,10 @@
                                 <label>November:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="NovTemp" id="NovTemp" type="number" value="62" style="width:99%;" data-month="November"></input>
+                                <input class="weather temperature" name="NovTemp" id="NovTemp" type="number" value="62" style="width:99%;" data-month="November"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="NovRain" id="NovRain" type="number" value="1" style="width:99%;" data-month="November"></input>
+                                <input class="weather rain" name="NovRain" id="NovRain" type="number" value="1" style="width:99%;" data-month="November"/>
                             </td>
                         </tr>
                         <tr>
@@ -648,10 +647,10 @@
                                 <label>December:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="DecTemp" id="DecTemp" type="number" value="58" style="width:99%;" data-month="December"></input>
+                                <input class="weather temperature" name="DecTemp" id="DecTemp" type="number" value="58" style="width:99%;" data-month="December"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="DecRain" id="DecRain" type="number" value="2" style="width:99%;" data-month="December"></input>
+                                <input class="weather rain" name="DecRain" id="DecRain" type="number" value="2" style="width:99%;" data-month="December"/>
                             </td>
                         </tr>
                         <tr>
@@ -808,6 +807,7 @@
     </div>
     <div id="hiddenContainer" style="display:none;">
         <canvas id="final" width="600" height="600"></canvas>
+        <input type="button" id="randomName">
     </div>
     </body>
     <script>
@@ -868,16 +868,16 @@
         for (object in broadcastPlayerDefenseArray) {
             html += "<tr>\n"
                  + "<td style=\"width:33%;\">"+object+":</td>\n"
-                 + "<td style=\"width:33%;\"><input class=\"xCoord 640 pCoordX\" name=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateX\" id=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerDefenseArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\" data-id=\""+object+"\"></input></td>\n"
-                 + "<td style=\"width:33%;\"><input class=\"yCoord 640 pCoordY\" name=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateY\" id=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerDefenseArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
+                 + "<td style=\"width:33%;\"><input class=\"xCoord 640 pCoordX\" name=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateX\" id=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerDefenseArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\" data-id=\""+object+"\"/></td>\n"
+                 + "<td style=\"width:33%;\"><input class=\"yCoord 640 pCoordY\" name=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateY\" id=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerDefenseArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
                  + "</tr>\n";
         }
         
         for (object in broadcastPlayerOffenseArray) {
             html += "<tr>\n"
             + "<td style=\"width:33%;\">"+object+":</td>\n"
-            + "<td style=\"width:33%;\"><input class=\"xCoord 640 pCoordX\" name=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateX\" id=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerOffenseArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
-            + "<td style=\"width:33%;\"><input class=\"yCoord 640 pCoordY\" name=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateY\" id=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerOffenseArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
+            + "<td style=\"width:33%;\"><input class=\"xCoord 640 pCoordX\" name=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateX\" id=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerOffenseArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
+            + "<td style=\"width:33%;\"><input class=\"yCoord 640 pCoordY\" name=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateY\" id=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerOffenseArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
             + "</tr>\n";
         }
         html += "</table>\n";
@@ -893,8 +893,8 @@
         for (object in webcastPlayerArray) {
             html += "<tr>\n"
             + "<td style=\"width:33%;\">"+object+":</td>\n"
-            + "<td style=\"width:33%;\"><input class=\"xCoord wCoordX\" name=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateX\" id=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateX\" type=\"number\" value=\""+webcastPlayerArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
-            + "<td style=\"width:33%;\"><input class=\"yCoord wCoordY\" name=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateY\" id=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateY\" type=\"number\" value=\""+webcastPlayerArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
+            + "<td style=\"width:33%;\"><input class=\"xCoord wCoordX\" name=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateX\" id=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateX\" type=\"number\" value=\""+webcastPlayerArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
+            + "<td style=\"width:33%;\"><input class=\"yCoord wCoordY\" name=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateY\" id=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateY\" type=\"number\" value=\""+webcastPlayerArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
             + "</tr>\n";
         }
         html += "</table>\n";
@@ -949,6 +949,11 @@
         $("#templateDownload").on("click",function(e) {
             e.preventDefault;
             ipcRenderer.send('get-template', null)
+        })
+
+        ipcRenderer.on('hide-overlay', (event, arg) => {
+            $(".pleaseWait").html("");    
+            $(".overlay").css("display","none");
         })
         
         $(".recalculate, .number, .weather").keydown(function(event) {
@@ -1293,19 +1298,6 @@
             canvas.renderAll();
         })
 
-        $("#randomName").on("click", function() {
-            $.ajax({
-                type: "POST",
-                url: "randomname.php",
-                success: function(data) {
-                    $("#ballparkName").val(data);
-                },
-                error: function(data) {
-                    alert(data);
-                }
-            });
-        })
-
         $("#flipPark").on("click", function() {
             var distances = [];
             var heights = [];
@@ -1555,6 +1547,8 @@
             calculateWeather();
             calculateFactors();
         })
+
+        
 
         function generateField() {
             canvas.clear();
@@ -2229,8 +2223,8 @@
             var x = 1;
             for (object in wallPointsArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                     + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(wallPointsArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n"
-                     + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(wallPointsArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n";
+                     + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(wallPointsArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n"
+                     + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(wallPointsArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                          + "<tr>\n";
@@ -2239,8 +2233,8 @@
             }
             for (object in staticBallLocationArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(staticBallLocationArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n"
-                + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(staticBallLocationArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n";
+                + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(staticBallLocationArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n"
+                + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(staticBallLocationArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                     + "<tr>\n";
@@ -2249,8 +2243,8 @@
             }
             for (object in foulPointsArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(foulPointsArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n"
-                + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(foulPointsArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n";
+                + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(foulPointsArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n"
+                + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(foulPointsArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                     + "<tr>\n";
@@ -2288,8 +2282,8 @@
             var x = 1;
             for (object in wallPointsArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                     + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+wallPointsArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n"
-                     + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+wallPointsArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n";
+                     + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+wallPointsArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n"
+                     + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+wallPointsArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                          + "<tr>\n";
@@ -2298,8 +2292,8 @@
             }
             for (object in staticBallLocationArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+staticBallLocationArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n"
-                + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+staticBallLocationArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n";
+                + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+staticBallLocationArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n"
+                + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+staticBallLocationArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                     + "<tr>\n";
@@ -2308,8 +2302,8 @@
             }
             for (object in foulPointsArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+foulPointsArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n"
-                + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+foulPointsArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n";
+                + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+foulPointsArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n"
+                + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+foulPointsArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                     + "<tr>\n";
@@ -2587,52 +2581,6 @@
             $("#hrRHBform").val(data.hrRHB);
         })
         
-/*         $("#downloadPark").on("click",function(e) {
-            e.preventDefault();
-            canvas.renderAll();
-            var fieldOptionItems = {};
-            logoCanvas.deactivateAll().renderAll();
-            var finalCanvas = document.getElementById('final');
-            var exportCtx = finalCanvas.getContext('2d');
-            exportCtx.clearRect(0,0,600,600);
-            exportCtx.drawImage(document.getElementById("c"),0,0);
-            exportCtx.drawImage(document.getElementById("c2"),0,0);
-            var exportCanvas = document.getElementById("final");
-            var dataURL = exportCanvas.toDataURL({format:"png"});
-            dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();  
-            $("#ballparkInformation").attr("method","post");
-            $("#ballparkInformation").attr("target","_blank");
-            $("#ballparkInformation").attr("action","packagepark.php");
-            switch ($("#playerCoordSelect").val()) {
-                case "broadcastPlayers":
-                    broadcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "broadcastBall":
-                    broadcastBall = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "webcastPlayers":
-                    webcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "webcastBall":
-                    webcastBall = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-            }
-            $("#canvasData").val(JSON.stringify(canvas.toJSON(['id','visible','selectable','perPixelTargetFind','centeredScaling','centeredRotation','borderColor','cornerColor','cornerSize','name','transparentCorners'])))
-            $("#fillCanvasData").val(JSON.stringify(fillCanvas.toJSON(['id','visible','selectable','perPixelTargetFind','centeredScaling','centeredRotation','borderColor','cornerColor','cornerSize','name','transparentCorners'])))
-            $("#logoCanvasData").val(JSON.stringify(logoCanvas.toJSON(['id','visible','selectable','perPixelTargetFind','centeredScaling','centeredRotation','borderColor','cornerColor','cornerSize','name','transparentCorners'])))
-            $("#broadcastPlayerCoordinates").val(broadcastPlayers);
-            $("#webcastPlayerCoordinates").val(webcastPlayers);
-            $("#broadcastBallCoordinates").val(broadcastBall);
-            $("#webcastBallCoordinates").val(webcastBall);
-            $("#frmImageData").val(dataURL);
-            $("div.fieldOption").each(function(e) {
-                fieldOptionItems[$(this).attr("id")] = $(this).is(':visible');
-            })
-            fieldOptionItems[$("#onDeckCirclesItem").attr("id")] = $("#onDeckCirclesItem").is(':visible');
-            $("#fieldOptionItems").val(JSON.stringify(fieldOptionItems));
-            //$("#ballparkInformation").submit();
-        }) */
-        
         $("#ballparkInformation").submit(function(e) {
             e.preventDefault()
             $(".pleaseWait").html("Preparing Park...");    
@@ -2658,6 +2606,8 @@
         });
 		
 		$("#downloadParkOriginal").on("click",function(e) {
+            $(".pleaseWait").html("Preparing Park...");    
+            $(".overlay").css("display","table");
 			e.preventDefault();
             canvas.renderAll();
             var fieldOptionItems = {};
@@ -2670,10 +2620,6 @@
             var exportCanvas = document.getElementById("final");
             var dataURL = exportCanvas.toDataURL({format:"png"});
             dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();  
-            //$("#ballparkInformation").attr("method","post");
-            //$("#ballparkInformation").attr("target","_blank");
-            //$("#ballparkInformation").attr("action","packagepark2.php");
-            //$("#ballparkInformation").attr("action","http://127.0.0.1:"+port+"/downloadBallpark");
             switch ($("#playerCoordSelect").val()) {
                 case "broadcastPlayers":
                     broadcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
@@ -2705,12 +2651,14 @@
             //console.log(convertFormToJSON($("#ballparkInformation")))
             ipcRenderer.send('save-ballpark',convertFormToJSON($("#ballparkInformation")))
         })
-        
-        document.getElementById('uploadedImg').onchange = function handleImage(e) {
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                var imgObj = new Image();
-                imgObj.src = event.target.result;
+
+        $("#addImage").on("click", function(e) {
+            ipcRenderer.send("add-image", null)
+        })
+
+        ipcRenderer.on('add-image-response', (event, data) => {
+            var imgObj = new Image();
+                imgObj.src = data.image;
                 imgObj.onload = function () {
                     var image = new fabric.Image(imgObj);
                     image.set({
@@ -2726,7 +2674,7 @@
                         cornerColor: 'yellow',
                         cornerSize: 12,
                         transparentCorners: false,
-                        id: $("#uploadedImg").val().split('\\').pop()
+                        id: data.filename
                     });
                     image.clipTo = function(ctx) {
                         ctx.save();
@@ -2744,16 +2692,15 @@
                     imgTop = image.get('top');
                     imgLeft = image.get('left');
                 }
-                
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        }
+        })
         
-        document.getElementById('uploadedPattern').onchange = function handleImage(e) {
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                var imgObj = new Image();
-                imgObj.src = event.target.result;
+        $("#addPattern").on("click", function(e) {
+            ipcRenderer.send("add-pattern", null)
+        })
+        
+        ipcRenderer.on('add-pattern-response', (event, data) => {
+            var imgObj = new Image();
+                imgObj.src = data.image;
                 imgObj.onload = function() {
                     $("#customMowPattern").val(imgObj.src);
                     $("#mow_pattern option[value='"+imgObj.src+"']").prop('selected', true);
@@ -2762,9 +2709,15 @@
                     $("#mowPatternOpacitySlider").val(mow_pattern.opacity*100);
                     $("#mowPatternOpacityValue").html(mow_pattern.opacity*100);
                 }
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        }
+        })
+
+        $("#randomName").on('click', function(e) {
+            ipcRenderer.send('random-park-name', null)
+        })
+
+        ipcRenderer.on('random-park-name-response', (event, data) => {
+            $("#ballparkName").val(data)
+        })
     
         $("#showPlayers").on("click",function(e) {
             logoCanvas.deactivateAll().renderAll();
