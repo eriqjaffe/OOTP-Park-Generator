@@ -2762,6 +2762,19 @@ const createWindow = () => {
     {
       label: "View",
       submenu: [
+        {   
+            label: "Edit Weather Information",
+            type: "radio",
+            accelerator: isMac ? "Cmd+Alt+W" : "Control+Alt+W",
+            click: () => mainWindow.webContents.send("show-weather", "click"),
+        },
+        {   
+            label: "Edit Player and Ball Locations",
+            type: "radio",
+            accelerator: isMac ? "Cmd+Alt+B" : "Control+Alt+B",
+            click: () => mainWindow.webContents.send("show-players", "click"),
+        },
+        { type: "separator" },
         { role: "reload" },
         { role: "forceReload" },
         { role: "toggleDevTools" },

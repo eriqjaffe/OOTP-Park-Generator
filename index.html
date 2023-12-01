@@ -232,7 +232,7 @@
             </table>
         </fieldset>
         <br>
-        <fieldset>
+        <fieldset style="display:none;">
             <legend>Actions</legend>
             <div class="formItem">
                 <input class="button" type="button" id="randomPark" value="Generate Random Ballpark">
@@ -725,7 +725,7 @@
                 </table>
             </fieldset>
             <br>
-            <fieldset>
+            <fieldset style="display:none;">
                 <input class="button" type="button" id="about" value="About The OOTP Park Generator" style="margin-top:5px;">
                 <input class="buttonLast" type="button" id="templateDownload" value="Download Mow Pattern Template">
                 <div style="text-align:center; margin-top:5px;">
@@ -796,7 +796,13 @@
             <div class="question">What is Out Of The Park Baseball?</div><br>
             <div class="answer">Out Of The Park Baseball is an award winning baseball management simulation published by OOTP Developments.  For more information about OOTP, as well as the other games they make, <a href="http://www.ootpdevelopments.com" target="_blank">visit their site</a>.</div><br>
             <div class="question">Who is responsible for this thing, and how can I get a hold of you?</div><br>
-            <div class="answer">That would be me.  My name is Eriq Jaffe, and I've been playing OOTP Baseball since 2004.  Feel free to <a href="mailto:eriqjaffe@ootputilities.com">shoot me an email</a> with any questions or comments about this site.</div><br>
+            <div class="answer">That would be me.  My name is Eriq Jaffe, and I've been playing OOTP Baseball since 2004.  Feel free to <a href="mailto:eriqjaffe@ootputilities.com">shoot me an email</a> with any questions or comments about this site.
+                <div style="text-align:center; margin-top:5px;">
+                    <a href="https://www.paypal.com/donate?business=UTTZRPAMBFCWA&no_recurring=1&currency_code=USD" target="_blank">
+                        <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button">
+                    </a>
+                </div>
+                </div><br>
         </div>
     </div>
     <div id="wait" class="wait-popup mfp-hide wait">
@@ -1552,6 +1558,7 @@
 
         function generateField() {
             canvas.clear();
+            logoCanvas.clear();
 
             var LLx = Math.round(Math.cos(-135 * Math.PI / 180) * parseInt($("#leftLine").val()) + x0);
             var LLy = Math.round(Math.sin(-135 * Math.PI / 180) * parseInt($("#leftLine").val()) + y0);
@@ -1799,7 +1806,12 @@
                 fontSize: 20                
             });
             wallPoints = new fabric.Group([llTextStroke,lfTextStroke,lcTextStroke,cfTextStroke,rlTextStroke,rfTextStroke,rcTextStroke,llText,lfText,lcText,cfText,rlText,rfText,rcText]);
-            wallPoints.set({selectable:false,visible:false});
+            //console.log($("#distanceMarkers").val())
+            wallPoints.set({
+                selectable:false,
+                visible: ($("#distanceMarkers").val() == "on") ? true : false
+            }
+            );
             outside_border = new fabric.Path(wallPath, {
                 fill: 'transparent',
                 originX: 'center',
