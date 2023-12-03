@@ -15,8 +15,6 @@ const initSqlJs = require("sql.js/dist/sql-wasm.js");
 const filebuffer = fs.readFileSync(
   path.join(app.getAppPath(), "db", "data.sqlite")
 );
-const { create } = require("xmlbuilder2");
-const xmlescape = require("xml-escape");
 const Jimp = require("jimp");
 const archiver = require("archiver");
 const isMac = process.platform === "darwin";

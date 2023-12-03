@@ -20,9 +20,7 @@
     "archiver": "^5.3.0",
     "electron-store": "^8.1.0",
     "jimp": "^0.16.1",
-    "sql.js": "^1.6.2",
-    "xml-escape": "^1.1.0",
-    "xmlbuilder2": "^3.0.2"
+    "sql.js": "^1.6.2"
   },
   "packageManager": "yarn@3.1.0",
   "build": {
