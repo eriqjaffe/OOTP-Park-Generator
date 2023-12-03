@@ -242,10 +242,7 @@
         <fieldset>
             <legend>Actions</legend>
             <div class="formItem">
-                <input class="button" type="button" id="exportForm" value="export">
-            </div>
-            <div class="formItem">
-                <input class="button" type="button" id="importForm" value="import">
+                <input class="button" type="button" id="loadPark" value="Load Park">
             </div>
             <div class="formItem">
                 <input class="button" type="button" id="randomPark" value="Generate Random Ballpark">
@@ -262,22 +259,9 @@
             <div class="formItem">
                 <input class="button" type="button" id="showPlayers" value="Edit Player & Ball Locations">
             </div>
-<!--             <div class="formItem">
-                <input class="button" type="button" id="downloadPark" value="Save Ballpark">
-            </div>
-            <div class="formItem">
-                <input type="file" id="loadPark" accept=".bpk" style="display:none;"/>
-                <input class="button" type="button" id="uploadPark" value="Load Ballpark">
-            </div> -->
 			<div class="formItem">
                 <input class="button" type="button" id="downloadParkOriginal" value="Download Ballpark">
             </div>
-<!--             <div class="formItem" style="display:none;">
-                <input class="button" type="button" id="cgiprk" value="cgi prk testing">
-            </div>
-            <div class="formItem" style="display:none;">
-                <input class="button" type="button" id="phpprk" value="php prk testing">
-            </div> -->
             <div class="formItem">
                 <input class="buttonLast" type="button" id="reset" value="Reset Everything">
             </div>
@@ -1343,20 +1327,17 @@
             calculateFactors();
         })
 
-        $("#exportForm").on("click", function() {
-            //e.preventDefault()
-            let json = {}
-            json.formValues = FormDataJson.toJson($("#ballparkInformation"), { includeDisabled: true })
-            json.canvasValues = canvas.toJSON()
-            json.logoCanvasValues = logoCanvas.toJSON()
-            json.fillCanvasValues = fillCanvas.toJSON()
-            jsoncoordinateCanvasValues = coordinateCanvas.toJSON()
-            console.log(json)
+        $("#loadPark").on("click", function() {
+            console.log("WHEEEE")
+            ipcRenderer.send('load-ballpark', null)
         })
 
-        $("#importForm").on("click",function() {
-            //e.preventDefault()
-            console.log("import")
+        ipcRenderer.on('load-park-response', (event, data) => {
+            if (data.result == "success") {
+                console.log(data.result)
+            } else {
+                ipcRenderer.send('show-error',data.message)
+            }
         })
 
         $("#randomPark").on("click", function() {
@@ -2623,7 +2604,7 @@
             $("#hrRHBform").val(data.hrRHB);
         })
         
-        $("#ballparkInformation").submit(function(e) {
+        /* $("#ballparkInformation").submit(function(e) {
             e.preventDefault()
             $(".pleaseWait").html("Preparing Park...");    
             $(".overlay").css("display","table");
@@ -2645,7 +2626,7 @@
                 }
             })
             return true;
-        });
+        }); */
 		
 		$("#downloadParkOriginal").on("click",function(e) {
             e.preventDefault();
@@ -3028,11 +3009,7 @@
             $("#"+obj.get('yID')).val(inputTop);
         });
 
-        $("#uploadPark").on("click",function(e) {
-            $("#loadPark").click();
-        })
-
-        document.getElementById('loadPark').onchange = function uploadFile(e) {
+        /* document.getElementById('loadPark').onchange = function uploadFile(e) {
             if (this.files[0].name.substr(this.files[0].name.length - 4) != ".bpk") {
                 alert("This does not appaer to be a valid park file.");
                 return false;
@@ -3158,7 +3135,7 @@
                 }
             });
             
-        }
+        } */
         
         $("#colorSquare").on("click",function(e) {
             $(this).removeClass("colorSquareSelected").addClass("colorSquareActive");

@@ -1,7 +1,7 @@
 const { app, shell, ipcRenderer } = require('electron')
 
 ipcRenderer.on('load-ballpark', (event, data) => {
-    $("#load").trigger("click")
+    $("#loadPark").trigger("click")
 });
 
 ipcRenderer.on('save-ballpark', (event, data) => {

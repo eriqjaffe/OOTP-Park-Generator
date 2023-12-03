@@ -22,6 +22,7 @@ const os = require("os");
 const tempDir = os.tmpdir();
 const increment = require("add-filename-increment");
 const Store = require("electron-store");
+const admzip = require('adm-zip');
 
 const store = new Store();
 
@@ -668,6 +669,73 @@ ipcMain.on("save-ballpark", (event, arg) => {
   }
 })
 
+ipcMain.on('load-ballpark', (event, arg) => {
+	let json = {}
+	const options = {
+		defaultPath: store.get("uploadParkPath", app.getPath('downloads')),
+		properties: ['openFile'],
+		filters: [
+			{ name: 'Park Files', extensions: ['park', 'zip'] }
+		]
+	}
+	dialog.showOpenDialog(null, options).then(result => {
+		if(!result.canceled) {
+			store.set("uploadParkPath", path.dirname(result.filePaths[0]))
+			switch (getExtension(result.filePaths[0])) {
+				case "park":
+					json.result = "success",
+					json.json = JSON.stringify(JSON.parse(fs.readFileSync(result.filePaths[0]).toString()))
+					event.sender.send('load-park-response', json)
+					break;
+				case "zip":
+					var parkFile = null;
+					var zip = new admzip(result.filePaths[0]);
+					var zipEntries = zip.getEntries()
+					zipEntries.forEach(function (zipEntry) {
+						if (zipEntry.entryName.slice(-5).toLowerCase() == '.park') {
+							parkFile = zipEntry
+						}
+					});
+					if (parkFile != null) {
+						json.result = "success"
+						json.json = JSON.stringify(JSON.parse(parkFile.getData().toString("utf8")))
+						event.sender.send('load-park-response', json)
+					} else {
+						json.result = "error",
+						json.message = "No valid ballpark file was found in "+path.basename(result.filePaths[0])
+						event.sender.send('load-park-response', json)
+					}
+					break;
+				default:
+					json.result = "error",
+					json.message = "Invalid file type: "+path.basename(result.filePaths[0])
+					event.sender.send('load-park-response', json)
+			}
+			event.sender.send('hide-overlay', null)
+		} else {
+			event.sender.send('hide-overlay', null)
+		}
+	}).catch(err => {
+		json.result = "error",
+		json.message = err
+		event.sender.send('load-park-response', json)
+		console.log(err)
+	})
+})
+
+ipcMain.on('show-alert', (event, arg) => {
+	dialog.showMessageBox(null, {
+		type: 'info',
+		message: arg
+	})
+})
+
+ipcMain.on('show-error', (event, arg) => {
+	dialog.showMessageBox(null, {
+		type: 'error',
+		message: arg
+	})
+})
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -704,11 +772,11 @@ const createWindow = () => {
     {
       label: "File",
       submenu: [
-        /* {
+        {
           click: () => mainWindow.webContents.send("load-ballpark", "click"),
           accelerator: isMac ? "Cmd+L" : "Control+L",
           label: "Load Ballpark",
-        }, */
+        },
         { type: "separator" },
         {
           click: () => mainWindow.webContents.send("save-ballpark", "click"),
@@ -868,4 +936,9 @@ app.on("window-all-closed", () => {
 function round(value, precision) {
   var multiplier = Math.pow(10, precision || 0);
   return Math.round(value * multiplier) / multiplier;
+}
+
+function getExtension(filename) {
+	var ext = path.extname(filename||'').split('.');
+	return ext[ext.length - 1];
 }
