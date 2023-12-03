@@ -13,6 +13,9 @@
     <script type="text/javascript" src="./scripts/fabric16.js"></script>
     <script type="text/javascript" src="./scripts/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="./scripts/spin.min.js"></script>
+    <script type="text/javascript" src="./scripts/form-data-json.min.js"></script>
+    <link href="./scripts/fontawesome.min.css" rel="stylesheet">
+    <link href="./scripts/solid.css" rel="stylesheet">
     <script>
         require('./renderer.js')
         const { ipcRenderer } = require('electron');
@@ -63,8 +66,11 @@
                         <td style="width:33%;">Park Name:</td>
                         <td style="width:66%;">
                             <span id="tb_cont">
-                                <input name="ballparkName" id="ballparkName" type="text" placeholder="Unnamed Ballpark"/>
-                                <span title="Generate A Random Park Name"id="randomName"></span>
+                                <div class="flexContainer">
+                                    <input class="inputField" name="ballparkName" id="ballparkName" type="text" placeholder="Unnamed Ballpark"/>
+                                    <button id="randomName"><i class="fa-solid fa-shuffle"></i></button>
+                                </div>
+                                <!--<span title="Generate A Random Park Name" id="randomName"></span>-->
                             </span>
                             
                         </td>
@@ -232,8 +238,15 @@
             </table>
         </fieldset>
         <br>
-        <fieldset style="display:none;">
+
+        <fieldset>
             <legend>Actions</legend>
+            <div class="formItem">
+                <input class="button" type="button" id="exportForm" value="export">
+            </div>
+            <div class="formItem">
+                <input class="button" type="button" id="importForm" value="import">
+            </div>
             <div class="formItem">
                 <input class="button" type="button" id="randomPark" value="Generate Random Ballpark">
             </div>
@@ -768,7 +781,7 @@
         </div>
         <div class="bgdiv" style="top:0; left:0; width:100%; position:absolute; z-index:-20;">
         </div>
-        <input type="hidden" value="" id="frmImageData" name="imagedata">
+        <!--<input type="hidden" value="" id="frmImageData" name="imagedata">
         <input type="hidden" value="" id="canvasData" name="canvas">
         <input type="hidden" value="" id="fillCanvasData" name="fillCanvas">
         <input type="hidden" value="" id="logoCanvasData" name="logoCanvas">
@@ -776,7 +789,7 @@
         <input type="hidden" value="" id="webcastPlayerCoordinates" name="webcastPlayerCoordinates">
         <input type="hidden" value="" id="broadcastBallCoordinates" name="broadcastBallCoordinates">
         <input type="hidden" value="" id="webcastBallCoordinates" name="webcastBallCoordinates">
-        <input type="hidden" value="" id="fieldOptionItems" name="fieldOptionItems">
+        <input type="hidden" value="" id="fieldOptionItems" name="fieldOptionItems">-->
     </form>
     <div id="FAQ" class="white-popup mfp-hide">
         <div style="width:100%; text-align:center;">    
@@ -1330,7 +1343,24 @@
             calculateFactors();
         })
 
+        $("#exportForm").on("click", function() {
+            //e.preventDefault()
+            let json = {}
+            json.formValues = FormDataJson.toJson($("#ballparkInformation"), { includeDisabled: true })
+            json.canvasValues = canvas.toJSON()
+            json.logoCanvasValues = logoCanvas.toJSON()
+            json.fillCanvasValues = fillCanvas.toJSON()
+            jsoncoordinateCanvasValues = coordinateCanvas.toJSON()
+            console.log(json)
+        })
+
+        $("#importForm").on("click",function() {
+            //e.preventDefault()
+            console.log("import")
+        })
+
         $("#randomPark").on("click", function() {
+            console.log("random!")
             $(".randomizer").each(function() {
                 var options = $(this).children('option');
                 var random = Math.floor(options.length * (Math.random() % 1));
@@ -2618,50 +2648,27 @@
         });
 		
 		$("#downloadParkOriginal").on("click",function(e) {
+            e.preventDefault();
             $(".pleaseWait").html("Preparing Park...");    
             $(".overlay").css("display","table");
-			e.preventDefault();
             canvas.renderAll();
-            var fieldOptionItems = {};
+            let json = {}
             logoCanvas.deactivateAll().renderAll();
-            var finalCanvas = document.getElementById('final');
-            var exportCtx = finalCanvas.getContext('2d');
+            let finalCanvas = document.getElementById('final');
+            let exportCtx = finalCanvas.getContext('2d');
             exportCtx.clearRect(0,0,600,600);
             exportCtx.drawImage(document.getElementById("c"),0,0);
             exportCtx.drawImage(document.getElementById("c2"),0,0);
-            var exportCanvas = document.getElementById("final");
-            var dataURL = exportCanvas.toDataURL({format:"png"});
+            let exportCanvas = document.getElementById("final");
+            let dataURL = exportCanvas.toDataURL({format:"png"});
             dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();  
-            switch ($("#playerCoordSelect").val()) {
-                case "broadcastPlayers":
-                    broadcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "broadcastBall":
-                    broadcastBall = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "webcastPlayers":
-                    webcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "webcastBall":
-                    webcastBall = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-            }
-            $("#canvasData").val("")
-            $("#fillCanvasData").val("")
-            $("#logoCanvasData").val("")
-            $("#broadcastPlayerCoordinates").val(broadcastPlayers);
-            $("#webcastPlayerCoordinates").val(webcastPlayers);
-            $("#broadcastBallCoordinates").val(broadcastBall);
-            $("#webcastBallCoordinates").val(webcastBall);
-            $("#frmImageData").val(dataURL);
-            $("div.fieldOption").each(function(e) {
-                fieldOptionItems[$(this).attr("id")] = $(this).is(':visible');
-            })
-            fieldOptionItems[$("#onDeckCirclesItem").attr("id")] = $("#onDeckCirclesItem").is(':visible');
-            $("#fieldOptionItems").val(JSON.stringify(fieldOptionItems));
-            //$("#ballparkInformation").submit();
-            //console.log(convertFormToJSON($("#ballparkInformation")))
-            ipcRenderer.send('save-ballpark',convertFormToJSON($("#ballparkInformation")))
+            json.formValues = FormDataJson.toJson($("#ballparkInformation"), { includeDisabled: true })
+            json.canvasValues = canvas.toJSON()
+            json.logoCanvasValues = logoCanvas.toJSON()
+            json.fillCanvasValues = fillCanvas.toJSON()
+            jsoncoordinateCanvasValues = coordinateCanvas.toJSON()
+            //ipcRenderer.send('save-ballpark',convertFormToJSON($("#ballparkInformation")))
+            ipcRenderer.send('save-ballpark',{json: json, imageData: dataURL})
         })
 
         $("#addImage").on("click", function(e) {
@@ -2724,6 +2731,7 @@
         })
 
         $("#randomName").on('click', function(e) {
+            e.preventDefault()
             ipcRenderer.send('random-park-name', null)
         })
 
@@ -3599,14 +3607,7 @@
             image.src = url;
         }
 
-        function convertFormToJSON(form) {
-            return $(form)
-            .serializeArray()
-            .reduce(function (json, { name, value }) {
-                json[name] = value;
-                return json;
-            }, {});
-        }
+        
 
     </script>
 </html>
