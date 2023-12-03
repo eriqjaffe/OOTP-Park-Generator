@@ -425,3 +425,11 @@ a {
     vertical-align:middle;
     z-index:250;
 }
+
+.flexContainer {
+    display: flex;
+}
+
+.inputField {
+    flex: 1;
+}
