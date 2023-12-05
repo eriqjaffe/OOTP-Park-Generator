@@ -1,6 +1,7 @@
 {
   "name": "parkgen",
-  "version": "0.1.2",
+  "productName": "OOTP Park Generator",
+  "version": "0.2.0",
   "description": "OOTP Park Generator",
   "main": "main.js",
   "scripts": {
@@ -15,12 +16,12 @@
   },
   "license": "ISC",
   "dependencies": {
+    "add-filename-increment": "^1.0.0",
+    "adm-zip": "^0.5.10",
     "archiver": "^5.3.0",
-    "express": "^4.17.1",
+    "electron-store": "^8.1.0",
     "jimp": "^0.16.1",
-    "sql.js": "^1.6.2",
-    "xml-escape": "^1.1.0",
-    "xmlbuilder2": "^3.0.2"
+    "sql.js": "^1.6.2"
   },
   "packageManager": "yarn@3.1.0",
   "build": {
@@ -28,9 +29,11 @@
     "mac": {
       "category": "public.app-category.utilities",
       "target": [
-        "zip",
         "dmg"
       ]
+    },
+    "dmg": {
+      "writeUpdateInfo": false
     },
     "win": {
       "target": [
@@ -52,19 +55,19 @@
       "include": "build/installer.nsh",
       "uninstallDisplayName": "${productName} ${version}",
       "installerIcon": "build/icon.ico",
-      "uninstallerIcon": "build/icon.ico"
+      "uninstallerIcon": "build/icon.ico",
+      "differentialPackage": false
     },
     "linux": {
       "target": [
         "deb",
-        "rpm",
-        "tar.gz"
+        "rpm"
       ]
     },
     "deb": {}
   },
   "devDependencies": {
-    "electron": "^17.1.0",
-    "electron-builder": "^22.14.5"
+    "electron": "^27.1.2",
+    "electron-builder": "^24.9.1"
   }
 }

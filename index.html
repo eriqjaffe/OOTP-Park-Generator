@@ -4,6 +4,7 @@
 <head>
     <title>OOTP Park Generator</title>
     <link rel="icon" type="image/png" href="./images/favicon.png">
+    <script>if (typeof module === 'object') {window.module = module; module = undefined;}</script>
     <script type="text/javascript" src="./scripts/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="./scripts/spectrum.js"></script>
     <script type="text/javascript" src="./scripts/jquery.browser.min.js"></script>
@@ -12,7 +13,12 @@
     <script type="text/javascript" src="./scripts/fabric16.js"></script>
     <script type="text/javascript" src="./scripts/jquery.mousewheel.min.js"></script>
     <script type="text/javascript" src="./scripts/spin.min.js"></script>
+    <script type="text/javascript" src="./scripts/form-data-json.min.js"></script>
+    <link href="./scripts/fontawesome.min.css" rel="stylesheet">
+    <link href="./scripts/solid.css" rel="stylesheet">
     <script>
+        require('./renderer.js')
+        const { ipcRenderer } = require('electron');
         const params = new URLSearchParams(window.location.search)
 		const port = params.get('port')
 
@@ -60,8 +66,11 @@
                         <td style="width:33%;">Park Name:</td>
                         <td style="width:66%;">
                             <span id="tb_cont">
-                                <input name="ballparkName" id="ballparkName" type="text" placeholder="Unnamed Ballpark"></input>
-                                <span title="Generate A Random Park Name"id="randomName"></span>
+                                <div class="flexContainer">
+                                    <input class="inputField" name="ballparkName" id="ballparkName" type="text" placeholder="Unnamed Ballpark"/>
+                                    <button id="randomName"><i class="fa-solid fa-shuffle"></i></button>
+                                </div>
+                                <!--<span title="Generate A Random Park Name" id="randomName"></span>-->
                             </span>
                             
                         </td>
@@ -129,13 +138,13 @@
         <tr>
             <td style="width:33%;">Altitude:</td>
             <td style="width:66%;">
-                <input class="recalculate center genericNumber" id="ballparkAltitude" name="ballparkAltitude" type="number" value="0"></input>
+                <input class="recalculate center genericNumber" id="ballparkAltitude" name="ballparkAltitude" type="number" value="0"/>
             </td>
         </tr>
         <tr>
             <td style="width:33%;">Capacity:</td>
             <td style="width:66%;">
-                <input class="number center genericNumber" id="ballparkCapacity" name="ballparkCapacity" type="number" value="42880"></input>
+                <input class="number center genericNumber" id="ballparkCapacity" name="ballparkCapacity" type="number" value="42880"/>
             </td>
         </tr>
         </table>
@@ -154,10 +163,10 @@
                         <label>Left Field Line:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="leftLine" name="leftLine" type="number" value="330" style="width:99%;" data-location="Left Field Line"></input>
+                        <input class="regenerate recalculate center distance" id="leftLine" name="leftLine" type="number" value="330" style="width:99%;" data-location="Left Field Line"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="leftLineWall" name="leftLineWall" type="number" value="11" style="width:99%;" data-location="Left Field Line"></input>
+                        <input class="recalculate center height" id="leftLineWall" name="leftLineWall" type="number" value="11" style="width:99%;" data-location="Left Field Line"/>
                     </td>
                 </tr>
                 <tr>
@@ -165,10 +174,10 @@
                         <label>Left Field:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="leftField" name="leftField" type="number" value="360" style="width:99%;" data-location="Left Field"></input>
+                        <input class="regenerate recalculate center distance" id="leftField" name="leftField" type="number" value="360" style="width:99%;" data-location="Left Field"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="leftFieldWall" name="leftFieldWall" type="number" value="11" style="width:99%;" data-location="Left Field"></input>
+                        <input class="recalculate center height" id="leftFieldWall" name="leftFieldWall" type="number" value="11" style="width:99%;" data-location="Left Field"/>
                     </td>
                 </tr>
                 <tr>
@@ -176,10 +185,10 @@
                         <label>Left Center:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="leftCenter" name="leftCenter" type="number" value="390" style="width:99%;" data-location="Left Center"></input>
+                        <input class="regenerate recalculate center distance" id="leftCenter" name="leftCenter" type="number" value="390" style="width:99%;" data-location="Left Center"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="leftCenterWall" name="leftCenterWall" type="number" value="11" style="width:99%;" data-location="Left Center"></input>
+                        <input class="recalculate center height" id="leftCenterWall" name="leftCenterWall" type="number" value="11" style="width:99%;" data-location="Left Center"/>
                     </td>
                 </tr>
                 <tr>
@@ -187,10 +196,10 @@
                         <label>Center Field:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="centerField" name="centerField" type="number" value="405" style="width:99%;" data-location="Center Field"></input>
+                        <input class="regenerate recalculate center distance" id="centerField" name="centerField" type="number" value="405" style="width:99%;" data-location="Center Field"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="centerFieldWall" name="centerFieldWall" type="number" value="11" style="width:99%;" data-location="Center Field"></input>
+                        <input class="recalculate center height" id="centerFieldWall" name="centerFieldWall" type="number" value="11" style="width:99%;" data-location="Center Field"/>
                     </td>
                 </tr>
                 <tr>
@@ -198,7 +207,7 @@
                         <label>Right Center:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="rightCenter" name="rightCenter" type="number" value="390" style="width:99%;" data-location="Right Center"></input>
+                        <input class="regenerate recalculate center distance" id="rightCenter" name="rightCenter" type="number" value="390" style="width:99%;" data-location="Right Center"/>
                     </td>
                     <td style="width:33%;">
                         <input class="recalculate center height" id="rightCenterWall" name="rightCenterWall" type="number" value="11" style="width:99%;" data-location="Right Center"</input>
@@ -209,10 +218,10 @@
                         <label>Right Field:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="rightField" name="rightField" type="number" value="360" style="width:99%;" data-location="Right Field"></input>
+                        <input class="regenerate recalculate center distance" id="rightField" name="rightField" type="number" value="360" style="width:99%;" data-location="Right Field"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="rightFieldWall" name="rightFieldWall" type="number" value="11" style="width:99%;" data-location="Right Field"></input>
+                        <input class="recalculate center height" id="rightFieldWall" name="rightFieldWall" type="number" value="11" style="width:99%;" data-location="Right Field"/>
                     </td>
                 </tr>
                 <tr>
@@ -220,17 +229,21 @@
                         <label>Right Field Line:</label>
                     </td>
                     <td style="width:33%;">
-                        <input class="regenerate recalculate center distance" id="rightLine" name="rightLine" type="number" value="330" style="width:99%;" data-location="Right Field Line"></input>
+                        <input class="regenerate recalculate center distance" id="rightLine" name="rightLine" type="number" value="330" style="width:99%;" data-location="Right Field Line"/>
                     </td>
                     <td style="width:33%;">
-                        <input class="recalculate center height" id="rightLineWall" name="rightLineWall" type="number" value="11" style="width:99%;" data-location="Right Field Line"></input>
+                        <input class="recalculate center height" id="rightLineWall" name="rightLineWall" type="number" value="11" style="width:99%;" data-location="Right Field Line"/>
                     </td>
                 </tr>
             </table>
         </fieldset>
         <br>
-        <fieldset>
+
+        <fieldset style="display:none;">
             <legend>Actions</legend>
+            <div class="formItem">
+                <input class="button" type="button" id="loadPark" value="Load Park">
+            </div>
             <div class="formItem">
                 <input class="button" type="button" id="randomPark" value="Generate Random Ballpark">
             </div>
@@ -238,32 +251,17 @@
                 <input class="button" type="button" id="flipPark" value="Flip Ballpark">
             </div>
             <div class="formItem">
-                <input type="file" id="uploadedPattern" accept="image/png" style="display:none;"/>
-                <input class="button addMowPattern" type="button" value="Upload Mow Pattern" onclick="document.getElementById('uploadedPattern').click();">
+                <input class="button addMowPattern" id="addPattern" type="button" value="Add Mow Pattern">
             </div>
             <div class="formItem">
-                <input type="file" id="uploadedImg" accept="image/*" style="display:none;"/>
-                <input class="button" type="button" id="addImage" value="Add Field Image" onclick="document.getElementById('uploadedImg').click();">
+                <input class="button" type="button" id="addImage" value="Add Field Image">
             </div>
             <div class="formItem">
                 <input class="button" type="button" id="showPlayers" value="Edit Player & Ball Locations">
             </div>
-<!--             <div class="formItem">
-                <input class="button" type="button" id="downloadPark" value="Save Ballpark">
-            </div>
-            <div class="formItem">
-                <input type="file" id="loadPark" accept=".bpk" style="display:none;"/>
-                <input class="button" type="button" id="uploadPark" value="Load Ballpark">
-            </div> -->
 			<div class="formItem">
                 <input class="button" type="button" id="downloadParkOriginal" value="Download Ballpark">
             </div>
-<!--             <div class="formItem" style="display:none;">
-                <input class="button" type="button" id="cgiprk" value="cgi prk testing">
-            </div>
-            <div class="formItem" style="display:none;">
-                <input class="button" type="button" id="phpprk" value="php prk testing">
-            </div> -->
             <div class="formItem">
                 <input class="buttonLast" type="button" id="reset" value="Reset Everything">
             </div>
@@ -525,10 +523,10 @@
                                 <label>January:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="JanTemp" id="JanTemp" type="number" value="57" style="width:99%;" data-month="January"></input>
+                                <input class="weather temperature" name="JanTemp" id="JanTemp" type="number" value="57" style="width:99%;" data-month="January"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="JanRain" id="JanRain" type="number" value="2" style="width:99%;" data-month="January"></input>
+                                <input class="weather rain" name="JanRain" id="JanRain" type="number" value="2" style="width:99%;" data-month="January"/>
                             </td>
                         </tr>
                         <tr>
@@ -536,10 +534,10 @@
                                 <label>February:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="FebTemp" id="FebTemp" type="number" value="58" style="width:99%;" data-month="February"></input>
+                                <input class="weather temperature" name="FebTemp" id="FebTemp" type="number" value="58" style="width:99%;" data-month="February"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="FebRain" id="FebRain" type="number" value="3" style="width:99%;" data-month="February"></input>
+                                <input class="weather rain" name="FebRain" id="FebRain" type="number" value="3" style="width:99%;" data-month="February"/>
                             </td>
                         </tr>
                         <tr>
@@ -547,10 +545,10 @@
                                 <label>March:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="MarTemp" id="MarTemp" type="number" value="58" style="width:99%;" data-month="March"></input>
+                                <input class="weather temperature" name="MarTemp" id="MarTemp" type="number" value="58" style="width:99%;" data-month="March"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="MarRain" id="MarRain" type="number" value="3" style="width:99%;" data-month="March"></input>
+                                <input class="weather rain" name="MarRain" id="MarRain" type="number" value="3" style="width:99%;" data-month="March"/>
                             </td>
                         </tr>
                         <tr>
@@ -558,10 +556,10 @@
                                 <label>April:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="AprTemp" id="AprTemp" type="number" value="61" style="width:99%;" data-month="April"></input>
+                                <input class="weather temperature" name="AprTemp" id="AprTemp" type="number" value="61" style="width:99%;" data-month="April"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="AprRain" id="AprRain" type="number" value="1" style="width:99%;" data-month="April"></input>
+                                <input class="weather rain" name="AprRain" id="AprRain" type="number" value="1" style="width:99%;" data-month="April"/>
                             </td>
                         </tr>
                         <tr>
@@ -569,10 +567,10 @@
                                 <label>May:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="MayTemp" id="MayTemp" type="number" value="63" style="width:99%;" data-month="May"></input>
+                                <input class="weather temperature" name="MayTemp" id="MayTemp" type="number" value="63" style="width:99%;" data-month="May"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="MayRain" id="MayRain" type="number" value="0" style="width:99%;" data-month="May"></input>
+                                <input class="weather rain" name="MayRain" id="MayRain" type="number" value="0" style="width:99%;" data-month="May"/>
                             </td>
                         </tr>
                         <tr>
@@ -580,10 +578,10 @@
                                 <label>June:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="JunTemp" id="JunTemp" type="number" value="66" style="width:99%;" data-month="June"></input>
+                                <input class="weather temperature" name="JunTemp" id="JunTemp" type="number" value="66" style="width:99%;" data-month="June"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="JunRain" id="JunRain" type="number" value="0" style="width:99%;" data-month="June"></input>
+                                <input class="weather rain" name="JunRain" id="JunRain" type="number" value="0" style="width:99%;" data-month="June"/>
                             </td>
                         </tr>
                         <tr>
@@ -591,10 +589,10 @@
                                 <label>July:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="JulTemp" id="JulTemp" type="number" value="69" style="width:99%;" data-month="July"></input>
+                                <input class="weather temperature" name="JulTemp" id="JulTemp" type="number" value="69" style="width:99%;" data-month="July"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="JulRain" id="JulRain" type="number" value="0" style="width:99%;" data-month="July"></input>
+                                <input class="weather rain" name="JulRain" id="JulRain" type="number" value="0" style="width:99%;" data-month="July"/>
                             </td>
                         </tr>
                         <tr>
@@ -602,10 +600,10 @@
                                 <label>August:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="AugTemp" id="AugTemp" type="number" value="71" style="width:99%;" data-month="August"></input>
+                                <input class="weather temperature" name="AugTemp" id="AugTemp" type="number" value="71" style="width:99%;" data-month="August"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="AugRain" id="AugRain" type="number" value="0" style="width:99%;" data-month="August"></input>
+                                <input class="weather rain" name="AugRain" id="AugRain" type="number" value="0" style="width:99%;" data-month="August"/>
                             </td>
                         </tr>
                         <tr>
@@ -613,10 +611,10 @@
                                 <label>September:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="SepTemp" id="SepTemp" type="number" value="70" style="width:99%;" data-month="September"></input>
+                                <input class="weather temperature" name="SepTemp" id="SepTemp" type="number" value="70" style="width:99%;" data-month="September"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="SepRain" id="SepRain" type="number" value="1" style="width:99%;" data-month="September"></input>
+                                <input class="weather rain" name="SepRain" id="SepRain" type="number" value="1" style="width:99%;" data-month="September"/>
                             </td>
                         </tr>
                         <tr>
@@ -624,10 +622,10 @@
                                 <label>October:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="OctTemp" id="OctTemp" type="number" value="67" style="width:99%;" data-month="October"></input>
+                                <input class="weather temperature" name="OctTemp" id="OctTemp" type="number" value="67" style="width:99%;" data-month="October"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="OctRain" id="OctRain" type="number" value="1" style="width:99%;" data-month="October"></input>
+                                <input class="weather rain" name="OctRain" id="OctRain" type="number" value="1" style="width:99%;" data-month="October"/>
                             </td>
                         </tr>
                         <tr>
@@ -635,10 +633,10 @@
                                 <label>November:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="NovTemp" id="NovTemp" type="number" value="62" style="width:99%;" data-month="November"></input>
+                                <input class="weather temperature" name="NovTemp" id="NovTemp" type="number" value="62" style="width:99%;" data-month="November"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="NovRain" id="NovRain" type="number" value="1" style="width:99%;" data-month="November"></input>
+                                <input class="weather rain" name="NovRain" id="NovRain" type="number" value="1" style="width:99%;" data-month="November"/>
                             </td>
                         </tr>
                         <tr>
@@ -646,10 +644,10 @@
                                 <label>December:</label>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather temperature" name="DecTemp" id="DecTemp" type="number" value="58" style="width:99%;" data-month="December"></input>
+                                <input class="weather temperature" name="DecTemp" id="DecTemp" type="number" value="58" style="width:99%;" data-month="December"/>
                             </td>
                             <td style="width:33%;">
-                                <input class="weather rain" name="DecRain" id="DecRain" type="number" value="2" style="width:99%;" data-month="December"></input>
+                                <input class="weather rain" name="DecRain" id="DecRain" type="number" value="2" style="width:99%;" data-month="December"/>
                             </td>
                         </tr>
                         <tr>
@@ -724,7 +722,7 @@
                 </table>
             </fieldset>
             <br>
-            <fieldset>
+            <fieldset style="display:none;">
                 <input class="button" type="button" id="about" value="About The OOTP Park Generator" style="margin-top:5px;">
                 <input class="buttonLast" type="button" id="templateDownload" value="Download Mow Pattern Template">
                 <div style="text-align:center; margin-top:5px;">
@@ -767,7 +765,7 @@
         </div>
         <div class="bgdiv" style="top:0; left:0; width:100%; position:absolute; z-index:-20;">
         </div>
-        <input type="hidden" value="" id="frmImageData" name="imagedata">
+        <!--<input type="hidden" value="" id="frmImageData" name="imagedata">
         <input type="hidden" value="" id="canvasData" name="canvas">
         <input type="hidden" value="" id="fillCanvasData" name="fillCanvas">
         <input type="hidden" value="" id="logoCanvasData" name="logoCanvas">
@@ -775,7 +773,7 @@
         <input type="hidden" value="" id="webcastPlayerCoordinates" name="webcastPlayerCoordinates">
         <input type="hidden" value="" id="broadcastBallCoordinates" name="broadcastBallCoordinates">
         <input type="hidden" value="" id="webcastBallCoordinates" name="webcastBallCoordinates">
-        <input type="hidden" value="" id="fieldOptionItems" name="fieldOptionItems">
+        <input type="hidden" value="" id="fieldOptionItems" name="fieldOptionItems">-->
     </form>
     <div id="FAQ" class="white-popup mfp-hide">
         <div style="width:100%; text-align:center;">    
@@ -795,7 +793,13 @@
             <div class="question">What is Out Of The Park Baseball?</div><br>
             <div class="answer">Out Of The Park Baseball is an award winning baseball management simulation published by OOTP Developments.  For more information about OOTP, as well as the other games they make, <a href="http://www.ootpdevelopments.com" target="_blank">visit their site</a>.</div><br>
             <div class="question">Who is responsible for this thing, and how can I get a hold of you?</div><br>
-            <div class="answer">That would be me.  My name is Eriq Jaffe, and I've been playing OOTP Baseball since 2004.  Feel free to <a href="mailto:eriqjaffe@ootputilities.com">shoot me an email</a> with any questions or comments about this site.</div><br>
+            <div class="answer">That would be me.  My name is Eriq Jaffe, and I've been playing OOTP Baseball since 2004.  Feel free to <a href="mailto:eriqjaffe@ootputilities.com">shoot me an email</a> with any questions or comments about this site.
+                <div style="text-align:center; margin-top:5px;">
+                    <a href="https://www.paypal.com/donate?business=UTTZRPAMBFCWA&no_recurring=1&currency_code=USD" target="_blank">
+                        <img src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button">
+                    </a>
+                </div>
+                </div><br>
         </div>
     </div>
     <div id="wait" class="wait-popup mfp-hide wait">
@@ -806,6 +810,7 @@
     </div>
     <div id="hiddenContainer" style="display:none;">
         <canvas id="final" width="600" height="600"></canvas>
+        <input type="button" id="randomName">
     </div>
     </body>
     <script>
@@ -866,16 +871,16 @@
         for (object in broadcastPlayerDefenseArray) {
             html += "<tr>\n"
                  + "<td style=\"width:33%;\">"+object+":</td>\n"
-                 + "<td style=\"width:33%;\"><input class=\"xCoord 640 pCoordX\" name=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateX\" id=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerDefenseArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\" data-id=\""+object+"\"></input></td>\n"
-                 + "<td style=\"width:33%;\"><input class=\"yCoord 640 pCoordY\" name=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateY\" id=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerDefenseArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
+                 + "<td style=\"width:33%;\"><input class=\"xCoord 640 pCoordX\" name=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateX\" id=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerDefenseArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\" data-id=\""+object+"\"/></td>\n"
+                 + "<td style=\"width:33%;\"><input class=\"yCoord 640 pCoordY\" name=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateY\" id=\""+broadcastPlayerDefenseArray[object]["short"]+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerDefenseArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
                  + "</tr>\n";
         }
         
         for (object in broadcastPlayerOffenseArray) {
             html += "<tr>\n"
             + "<td style=\"width:33%;\">"+object+":</td>\n"
-            + "<td style=\"width:33%;\"><input class=\"xCoord 640 pCoordX\" name=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateX\" id=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerOffenseArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
-            + "<td style=\"width:33%;\"><input class=\"yCoord 640 pCoordY\" name=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateY\" id=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerOffenseArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
+            + "<td style=\"width:33%;\"><input class=\"xCoord 640 pCoordX\" name=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateX\" id=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerOffenseArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
+            + "<td style=\"width:33%;\"><input class=\"yCoord 640 pCoordY\" name=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateY\" id=\""+broadcastPlayerOffenseArray[object]["short"]+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(broadcastPlayerOffenseArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
             + "</tr>\n";
         }
         html += "</table>\n";
@@ -891,8 +896,8 @@
         for (object in webcastPlayerArray) {
             html += "<tr>\n"
             + "<td style=\"width:33%;\">"+object+":</td>\n"
-            + "<td style=\"width:33%;\"><input class=\"xCoord wCoordX\" name=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateX\" id=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateX\" type=\"number\" value=\""+webcastPlayerArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
-            + "<td style=\"width:33%;\"><input class=\"yCoord wCoordY\" name=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateY\" id=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateY\" type=\"number\" value=\""+webcastPlayerArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"></input></td>\n"
+            + "<td style=\"width:33%;\"><input class=\"xCoord wCoordX\" name=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateX\" id=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateX\" type=\"number\" value=\""+webcastPlayerArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
+            + "<td style=\"width:33%;\"><input class=\"yCoord wCoordY\" name=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateY\" id=\""+webcastPlayerArray[object]["short"]+"WebcastCoordinateY\" type=\"number\" value=\""+webcastPlayerArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"\"/></td>\n"
             + "</tr>\n";
         }
         html += "</table>\n";
@@ -921,23 +926,7 @@
             $('.upper-canvas').bind('contextmenu', function (e) {
                 return false;
             });
-            $.ajax({
-                url: "http://127.0.0.1:"+port+"/getCountries",
-                type: "GET",
-                success: function(data) {
-                    $("#ballparkCountry").append($('<option>', {
-                        value: '',
-                        text: 'Select a country'
-                    }));
-                    JSON.parse(data).forEach(function (item, index) {
-                        $("#ballparkCountry").append($('<option>', {
-                            value: item,
-                            text: item
-                        }));
-                    });
-                    //$("#ballparkCountry").html(data);
-                }
-            });
+            ipcRenderer.send('get-countries', null)
             $(".button").each(function(e) {
                 $(this).prop("disabled",false);
             })   
@@ -947,15 +936,27 @@
             generateCoordinates();
         })
 
+        ipcRenderer.on('get-countries-response', (event, data) => {
+            $("#ballparkCountry").append($('<option>', {
+                value: '',
+                text: 'Select a country'
+            }));
+            JSON.parse(data).forEach(function (item, index) {
+                $("#ballparkCountry").append($('<option>', {
+                    value: item,
+                    text: item
+                }));
+            });
+        })
+
         $("#templateDownload").on("click",function(e) {
             e.preventDefault;
-            $.ajax({
-                url: "http://127.0.0.1:"+port+"/getTemplate",
-                type: "GET",
-                success: function(data) {
+            ipcRenderer.send('get-template', null)
+        })
 
-                }
-            })
+        ipcRenderer.on('hide-overlay', (event, arg) => {
+            $(".pleaseWait").html("");    
+            $(".overlay").css("display","none");
         })
         
         $(".recalculate, .number, .weather").keydown(function(event) {
@@ -1143,93 +1144,49 @@
         })
 
         $('#ballparkCountry').change(function() {
-            $.ajax({
-                //url: "statecount.php",
-                url: "http://127.0.0.1:"+port+"/stateCount",
-                method: "post",
-                data: {
-                    country: $("#ballparkCountry").val()
-                },
-                success: function(data) {
-                    $("#ballparkState").html("");
-                    if (parseInt(data) > 0) {
-                        $.ajax({
-                            url: "http://127.0.0.1:"+port+"/getStates",
-                            //url: "states.php",
-                            method: "post",
-                            data: {
-                                country: $("#ballparkCountry").val()
-                            },
-                            success: function(data) {
-                                $("#ballparkState").prop("disabled", false);
-                                $("#ballparkCity").prop("disabled", true);
-                                $("#ballparkCity").html("");
-                                $("#ballparkState").append($('<option>', {
-                                    value: "",
-                                    text: "Select a State/Province"
-                                }));
-                                JSON.parse(data).forEach(function (item, index) {;
-                                    $("#ballparkState").append($('<option>', {
-                                        value: item,
-                                        text: item
-                                    }));
-                                });
-                            }
-                        })
-                    } else {
-                        $("#ballparkState").html("");
-                        $("#ballparkCity").html("");
-                        $("#ballparkState").prop("disabled", true);
-                        $.ajax({
-                            url: "http://127.0.0.1:"+port+"/getCitiesNS",
-                            //url: "cities2.php",
-                            method: "post",
-                            data: {
-                                country: $("#ballparkCountry").val()
-                            },
-                            success: function(data) {
-                                $("#ballparkCity").prop("disabled", false);
-                                $("#ballparkCity").append($('<option>', {
-                                    value: "",
-                                    text: "Select a City"
-                                }));
-                                JSON.parse(data).forEach(function (item, index) {;
-                                    $("#ballparkCity").append($('<option>', {
-                                        value: item,
-                                        text: item
-                                    }));
-                                });
-                            }
-                        })
-                    }
-                }
-            })
+            ipcRenderer.send('get-states',{country: $("#ballparkCountry").val()})
+        })
+
+        ipcRenderer.on('get-states-response', (event, data) => {
+            if (data.count < 1) {
+                $("#ballparkState").html("");
+                $("#ballparkCity").html("");
+                $("#ballparkState").prop("disabled", true);
+                ipcRenderer.send('get-cities', {country: $("#ballparkCountry").val(), state: null})
+            } else {
+                $("#ballparkState").prop("disabled", false);
+                $("#ballparkCity").prop("disabled", true);
+                $("#ballparkCity").html("");
+                $("#ballparkState").append($('<option>', {
+                    value: "",
+                    text: "Select a State/Province"
+                }));
+                JSON.parse(data.states).forEach(function (item, index) {;
+                    $("#ballparkState").append($('<option>', {
+                        value: item,
+                        text: item
+                    }));
+                });
+            }
         })
 
         $('#ballparkState').change(function() {
             $("#ballparkCity").html("");
-            $.ajax({
-                url: "http://127.0.0.1:"+port+"/getCities",
-                //url: "cities.php",
-                method: "post",
-                data: {
-                    country: $("#ballparkCountry").val(),
-                    state: $("#ballparkState").val()
-                },
-                success: function(data) {
-                    $("#ballparkCity").prop("disabled", false);
-                    $("#ballparkCity").append($('<option>', {
-                        value: "",
-                        text: "Select a City"
-                    }));
-                    JSON.parse(data).forEach(function (item, index) {;
-                        $("#ballparkCity").append($('<option>', {
-                            value: item,
-                            text: item
-                        }));
-                    });
-                }
-            })
+            ipcRenderer.send('get-cities', {country: $("#ballparkCountry").val(), state: $("#ballparkState").val()})
+        })
+
+        ipcRenderer.on('get-cities-response', (event, data) => {
+            $("#ballparkCity").prop("disabled", false);
+            $("#ballparkCity").append($('<option>', {
+                value: "",
+                text: "Select a City"
+            }));
+            JSON.parse(data).forEach(function (item, index) {;
+                $("#ballparkCity").append($('<option>', {
+                    value: item,
+                    text: item
+                }));
+            });
         })
 
         $('#ballparkCity').change(function() {;
@@ -1238,49 +1195,37 @@
             } else {
                 state = $("#ballparkState").val();
             }
-            $.ajax({
-                url: "http://127.0.0.1:"+port+"/getWeather",
-                //url: "getweather.php",
-                method: "post",
-                data: {
-                    country: $("#ballparkCountry").val(),
-                    state: state,
-                    city: $("#ballparkCity").val()
-                },
-                dataType: "json",
-                success: function(data) {
-                    $("#ballparkAltitude").val(data[0].Altitude);
-                    $("#JanRain").val(data[0].JanRain);
-                    $("#FebRain").val(data[0].FebRain);
-                    $("#MarRain").val(data[0].MarRain);
-                    $("#AprRain").val(data[0].AprRain);
-                    $("#MayRain").val(data[0].MayRain);
-                    $("#JunRain").val(data[0].JunRain);
-                    $("#JulRain").val(data[0].JulRain);
-                    $("#AugRain").val(data[0].AugRain);
-                    $("#SepRain").val(data[0].SepRain);
-                    $("#OctRain").val(data[0].OctRain);
-                    $("#NovRain").val(data[0].NovRain);
-                    $("#DecRain").val(data[0].DecRain);
-                    $("#JanTemp").val(data[0].JanTemp);
-                    $("#FebTemp").val(data[0].FebTemp);
-                    $("#MarTemp").val(data[0].MarTemp);
-                    $("#AprTemp").val(data[0].AprTemp);
-                    $("#MayTemp").val(data[0].MayTemp);
-                    $("#JunTemp").val(data[0].JunTemp);
-                    $("#JulTemp").val(data[0].JulTemp);
-                    $("#AugTemp").val(data[0].AugTemp);
-                    $("#SepTemp").val(data[0].SepTemp);
-                    $("#OctTemp").val(data[0].OctTemp);
-                    $("#NovTemp").val(data[0].NovTemp);
-                    $("#DecTemp").val(data[0].DecTemp);
-                    $("#avgWind").val(data[0].AverageWind);
-                    calculateWeather();
-                },
-                error: function(data) {
-                    alert(data.responseText);
-                }
-            })
+            ipcRenderer.send('get-weather', {country: $("#ballparkCountry").val(), state: $("#ballparkState").val(), city: $("#ballparkCity").val() })
+        })
+
+        ipcRenderer.on('get-weather-response', (event, data) => {
+            $("#ballparkAltitude").val(data[0].Altitude);
+            $("#JanRain").val(data[0].JanRain);
+            $("#FebRain").val(data[0].FebRain);
+            $("#MarRain").val(data[0].MarRain);
+            $("#AprRain").val(data[0].AprRain);
+            $("#MayRain").val(data[0].MayRain);
+            $("#JunRain").val(data[0].JunRain);
+            $("#JulRain").val(data[0].JulRain);
+            $("#AugRain").val(data[0].AugRain);
+            $("#SepRain").val(data[0].SepRain);
+            $("#OctRain").val(data[0].OctRain);
+            $("#NovRain").val(data[0].NovRain);
+            $("#DecRain").val(data[0].DecRain);
+            $("#JanTemp").val(data[0].JanTemp);
+            $("#FebTemp").val(data[0].FebTemp);
+            $("#MarTemp").val(data[0].MarTemp);
+            $("#AprTemp").val(data[0].AprTemp);
+            $("#MayTemp").val(data[0].MayTemp);
+            $("#JunTemp").val(data[0].JunTemp);
+            $("#JulTemp").val(data[0].JulTemp);
+            $("#AugTemp").val(data[0].AugTemp);
+            $("#SepTemp").val(data[0].SepTemp);
+            $("#OctTemp").val(data[0].OctTemp);
+            $("#NovTemp").val(data[0].NovTemp);
+            $("#DecTemp").val(data[0].DecTemp);
+            $("#avgWind").val(data[0].AverageWind);
+            calculateWeather();
         })
 
         $("#ballparkType").on("change", function() {
@@ -1356,19 +1301,6 @@
             canvas.renderAll();
         })
 
-        $("#randomName").on("click", function() {
-            $.ajax({
-                type: "POST",
-                url: "randomname.php",
-                success: function(data) {
-                    $("#ballparkName").val(data);
-                },
-                error: function(data) {
-                    alert(data);
-                }
-            });
-        })
-
         $("#flipPark").on("click", function() {
             var distances = [];
             var heights = [];
@@ -1395,250 +1327,295 @@
             calculateFactors();
         })
 
-        $("#randomPark").on("click", function() {
-            var state;
-            var city;
-            $.ajax({
-                type: "GET",
-                url: "http://127.0.0.1:"+port+"/randomName",
-                success: function(data) {
-                    $("#ballparkName").val(data);
-                },
-                error: function(data) {
-                    alert(data);
-                }
-            });
-            $.ajax({
-                type: "GET",
-                url: "http://127.0.0.1:"+port+"/randomCity",
-                dataType: "json",
-                success: function(data) {
-                    $("#ballparkAltitude").val(data.Altitude);
-                    $("#JanRain").val(data.JanRain);
-                    $("#FebRain").val(data.FebRain);
-                    $("#MarRain").val(data.MarRain);
-                    $("#AprRain").val(data.AprRain);
-                    $("#MayRain").val(data.MayRain);
-                    $("#JunRain").val(data.JunRain);
-                    $("#JulRain").val(data.JulRain);
-                    $("#AugRain").val(data.AugRain);
-                    $("#SepRain").val(data.SepRain);
-                    $("#OctRain").val(data.OctRain);
-                    $("#NovRain").val(data.NovRain);
-                    $("#DecRain").val(data.DecRain);
-                    $("#JanTemp").val(data.JanTemp);
-                    $("#FebTemp").val(data.FebTemp);
-                    $("#MarTemp").val(data.MarTemp);
-                    $("#AprTemp").val(data.AprTemp);
-                    $("#MayTemp").val(data.MayTemp);
-                    $("#JunTemp").val(data.JunTemp);
-                    $("#JulTemp").val(data.JulTemp);
-                    $("#AugTemp").val(data.AugTemp);
-                    $("#SepTemp").val(data.SepTemp);
-                    $("#OctTemp").val(data.OctTemp);
-                    $("#NovTemp").val(data.NovTemp);
-                    $("#DecTemp").val(data.DecTemp);
-                    $("#avgWind").val(data.AverageWind);
-                    state = data.State;
-                    city = data.City;
-                    $.ajax({
-                        url: "http://127.0.0.1:"+port+"/getStates",
-                        method: "GET",
-                        datatype: "json",
-                        success: function(data) {
-                            $("#ballparkState").prop("disabled", false);
-                            $("#ballparkCity").prop("disabled", true);
-                            $("#ballparkCity").html("");
-                            $("#ballparkState").append($('<option>', {
-                                value: "",
-                                text: "Select a State/Province"
-                            }));
-                            JSON.parse(data).forEach(function (item, index) {;
-                                $("#ballparkState").append($('<option>', {
-                                    value: item,
-                                    text: item
-                                }));
-                            });
-                            $.ajax({
-                                url: "http://127.0.0.1:"+port+"/getCities",
-                                method: "post",
-                                data: {
-                                    country: "United States of America",
-                                    state: state
-                                },
-                                success: function(data) {
-                                    $("#ballparkCity").prop("disabled", false);
-                                    $("#ballparkCity").append($('<option>', {
-                                        value: "",
-                                        text: "Select a City"
-                                    }));
-                                    JSON.parse(data).forEach(function (item, index) {;
-                                        $("#ballparkCity").append($('<option>', {
-                                            value: item,
-                                            text: item
-                                        }));
-                                    });
-                                    $("#ballparkCountry").val("United States of America");
-                                    $("#ballparkState").val(state);
-                                    $("#ballparkCity").val(city);
-                                    $(".randomizer").each(function() {
-                                        var options = $(this).children('option');
-                                        var random = Math.floor(options.length * (Math.random() % 1));
-                                        if ($(this).attr("id") == "mow_pattern") {
-                                            while (random == 15) {
-                                                var random = Math.floor(options.length * (Math.random() % 1));
-                                            }
-                                        }
-                                        $(this).find('option')[random].selected = true;
-                                    })
-                                    $("#ballparkCapacity").val(Math.floor(Math.random() * (56000 - 1000 + 1) + 1000));
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 95) {
-                                        var LL = Math.floor(Math.random() * (400 - 360) + 360);
-                                    } else if (random > 90) {
-                                        var LL = Math.floor(Math.random() * (300 - 230) + 230);
-                                    } else {
-                                        var LL = Math.floor(Math.random() * (370 - 290) + 290);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 95) {
-                                        var LF = Math.floor(Math.random() * (415 - 385) + 385);
-                                    } else {
-                                        var LF = Math.floor(Math.random() * (385 - LL) + LL);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 90) {
-                                        var LC = Math.floor(Math.random() * (460 - 420) + 420);
-                                    } else {
-                                        var LC = Math.floor(Math.random() * (410 - LF) + LF);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 95) {
-                                        var RL = Math.floor(Math.random() * (400 - 360) + 360);
-                                    } else if (random > 90) {
-                                        var RL = Math.floor(Math.random() * (300 - 230) + 230);
-                                    } else {
-                                        var RL = Math.floor(Math.random() * (370 - 290) + 290);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 95) {
-                                        var RF = Math.floor(Math.random() * (415 - 385) + 385);
-                                    } else {
-                                        var RF = Math.floor(Math.random() * (385 - RL) + RL);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 90) {
-                                        var RC = Math.floor(Math.random() * (460 - 420) + 420);
-                                    } else {
-                                        var RC = Math.floor(Math.random() * (410 - RF) + RF);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 98) {
-                                        var CF = Math.floor(Math.random() * (480 - 440) + 445);
-                                    } else if (random > 94) {
-                                        var CF = Math.floor(Math.random() * (455 - 420) + 430);
-                                    } else if (random > 86) {
-                                        var CF = Math.floor(Math.random() * (425 - 400) + 400);
-                                    } else if (random > 43) {
-                                        var CF = Math.floor(Math.random() * (410 - RC) + RC);
-                                    } else {
-                                        var CF = Math.floor(Math.random() * (410 - LC) + LC);
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 97) {
-                                        var LLW = Math.floor(Math.random() * (60 - 35) + 35);
-                                    } else if (random > 90) {
-                                        var LLW = Math.floor(Math.random() * (35 - 20) + 20);
-                                    } else if (random > 82) {
-                                        var LLW = Math.floor(Math.random() * (20 - 8) + 8);
-                                    } else if (random > 30) {
-                                        var LLW = Math.floor(8 + Math.random() * (4 - 1) + 1);
-                                    } else {
-                                        var LLW = 8;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 97) {
-                                        var RLW = Math.floor(Math.random() * (60 - 35) + 35);
-                                    } else if (random > 90) {
-                                        var RLW = Math.floor(Math.random() * (35 - 20) + 20);
-                                    } else if (random > 82) {
-                                        var RLW = Math.floor(Math.random() * (20 - 8) + 8);
-                                    } else if (random > 30) {
-                                        var RLW = Math.floor(8 + Math.random() * (4 - 1) + 1);
-                                    } else {
-                                        var RLW = 8;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 98) {
-                                        var LFW = Math.floor(LLW + Math.random() * (20 - 1) + 1);
-                                    } else if (random > 96) {
-                                        var LFW = Math.floor(LLW - Math.random() * (20 - 1) + 1);
-                                    } else {
-                                        var LFW = LLW;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 98) {
-                                        var RFW = Math.floor(RLW + Math.random() * (20 - 1) + 1);
-                                    } else if (random > 96) {
-                                        var RFW = Math.floor(RLW - Math.random() * (20 - 1) + 1);
-                                    } else {
-                                        var RFW = RLW;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 35) {
-                                        var LCW = Math.floor(8 + Math.random() * (4 - 1) + 1);
-                                    } else if (random > 30) {
-                                        var LCW = Math.floor(LFW + Math.random() * (10 - 1) + 1);
-                                    } else {
-                                        var LCW = LFW;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 35) {
-                                        var RCW = Math.floor(8 + Math.random() * (4 - 1) + 1);
-                                    } else if (random > 30) {
-                                        var RCW = Math.floor(LFW + Math.random() * (10 - 1) + 1);
-                                    } else {
-                                        var RCW = RFW;
-                                    }
-                                    var random = Math.floor(Math.random() * 100) + 1;
-                                    if (random > 70) {
-                                        var CFW = RCW;
-                                    } else if (random > 40) {
-                                        var CFW = LCW;
-                                    } else if (random > 3) {
-                                        var CFW = Math.floor((RCW + LCW) / 2);
-                                    } else {
-                                        var CFW = Math.floor(Math.random() * (60 - 8) + 8);
-                                    }
-                                    $("#leftLine").val(LL);
-                                    $("#leftLineWall").val(LLW);
-                                    $("#leftField").val(LF);
-                                    $("#leftFieldWall").val(LFW);
-                                    $("#leftCenter").val(LC);
-                                    $("#leftCenterWall").val(LCW);
-                                    $("#centerField").val(CF);
-                                    $("#centerFieldWall").val(CFW);
-                                    $("#rightLine").val(RL);
-                                    $("#rightLineWall").val(RLW);
-                                    $("#rightField").val(RF);
-                                    $("#rightFieldWall").val(RFW);
-                                    $("#rightCenter").val(RC);
-                                    $("#rightCenterWall").val(RCW);
-                                    calculateWeather();
-                                    calculateFactors();
-                                    generateField();
-                                    generateCoordinates();
-                                    $(".overlay").css("display","none");
-                                }
-                            })
-                        }
-                    })
-                }
-            })
+        $("#loadPark").on("click", function() {
+            ipcRenderer.send('load-ballpark', null)
         })
+
+        ipcRenderer.on('load-park-response', (event, data) => {
+            if (data.result == "success") {
+                $("#ballparkState").html("")
+                $("#ballparkCity").html("")
+                let json = JSON.parse(data.json)
+                if (json.states.length > 0) {
+                    $("#ballparkState").prop("disabled",false);
+                    $.each(json.states, function(index, state) {
+                        $.each(state, function(key, value) {
+                            $("#ballparkState").append($("<option>", {
+                                value: key,
+                                text: value
+                            }));
+                        });
+                    });
+                } else {
+                    $("#ballparkState").prop("disabled",true);
+                }
+                if (json.cities.length > 0) {
+                    $("#ballparkCity").prop("disabled",false);
+                    $.each(json.cities, function(index, city) {
+                        $.each(city, function(key, value) {
+                            $("#ballparkCity").append($("<option>", {
+                                value: key,
+                                text: value
+                            }));
+                        });
+                    });
+                } else {
+                    $("#ballparkCity").prop("disabled",true);
+                }
+                FormDataJson.fromJson($("#ballparkInformation"), json.formValues)
+                canvas.loadFromJSON(json.canvasValues, canvas.renderAll.bind(canvas), function(o, object) {
+                    canvas.add(object);
+                    if (object.id == "field") {
+                        clippingPath.path = object.path;
+                    }
+                })
+                fillCanvas.loadFromJSON(json.fillCanvasValues, fillCanvas.renderAll.bind(fillCanvas), function(o, object) {
+                    fillCanvas.add(object);
+                })
+                logoCanvas.loadFromJSON(json.logoCanvasValues, logoCanvas.renderAll.bind(logoCanvas), function(o, object) {
+                    logoCanvas.add(object);
+                })
+                coordinateCanvas.loadFromJSON(json.coordinateCanvasValues, coordinateCanvas.renderAll.bind(coordinateCanvas), function(o, object) {
+                    coordinateCanvas.add(object);
+                })
+                generateField();
+                generateCoordinates();
+                calculateWeather();
+                calculateFactors();
+            } else {
+                ipcRenderer.send('show-error',data.message)
+            }
+        })
+
+        $("#randomPark").on("click", function() {
+            $(".randomizer").each(function() {
+                var options = $(this).children('option');
+                var random = Math.floor(options.length * (Math.random() % 1));
+                if ($(this).attr("id") == "mow_pattern") {
+                    while (random == 15) {
+                        var random = Math.floor(options.length * (Math.random() % 1));
+                    }
+                }
+                $(this).find('option')[random].selected = true;
+            })
+            $("#ballparkCapacity").val(Math.floor(Math.random() * (56000 - 1000 + 1) + 1000));
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 95) {
+                var LL = Math.floor(Math.random() * (400 - 360) + 360);
+            } else if (random > 90) {
+                var LL = Math.floor(Math.random() * (300 - 230) + 230);
+            } else {
+                var LL = Math.floor(Math.random() * (370 - 290) + 290);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 95) {
+                var LF = Math.floor(Math.random() * (415 - 385) + 385);
+            } else {
+                var LF = Math.floor(Math.random() * (385 - LL) + LL);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 90) {
+                var LC = Math.floor(Math.random() * (460 - 420) + 420);
+            } else {
+                var LC = Math.floor(Math.random() * (410 - LF) + LF);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 95) {
+                var RL = Math.floor(Math.random() * (400 - 360) + 360);
+            } else if (random > 90) {
+                var RL = Math.floor(Math.random() * (300 - 230) + 230);
+            } else {
+                var RL = Math.floor(Math.random() * (370 - 290) + 290);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 95) {
+                var RF = Math.floor(Math.random() * (415 - 385) + 385);
+            } else {
+                var RF = Math.floor(Math.random() * (385 - RL) + RL);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 90) {
+                var RC = Math.floor(Math.random() * (460 - 420) + 420);
+            } else {
+                var RC = Math.floor(Math.random() * (410 - RF) + RF);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 98) {
+                var CF = Math.floor(Math.random() * (480 - 440) + 445);
+            } else if (random > 94) {
+                var CF = Math.floor(Math.random() * (455 - 420) + 430);
+            } else if (random > 86) {
+                var CF = Math.floor(Math.random() * (425 - 400) + 400);
+            } else if (random > 43) {
+                var CF = Math.floor(Math.random() * (410 - RC) + RC);
+            } else {
+                var CF = Math.floor(Math.random() * (410 - LC) + LC);
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 97) {
+                var LLW = Math.floor(Math.random() * (60 - 35) + 35);
+            } else if (random > 90) {
+                var LLW = Math.floor(Math.random() * (35 - 20) + 20);
+            } else if (random > 82) {
+                var LLW = Math.floor(Math.random() * (20 - 8) + 8);
+            } else if (random > 30) {
+                var LLW = Math.floor(8 + Math.random() * (4 - 1) + 1);
+            } else {
+                var LLW = 8;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 97) {
+                var RLW = Math.floor(Math.random() * (60 - 35) + 35);
+            } else if (random > 90) {
+                var RLW = Math.floor(Math.random() * (35 - 20) + 20);
+            } else if (random > 82) {
+                var RLW = Math.floor(Math.random() * (20 - 8) + 8);
+            } else if (random > 30) {
+                var RLW = Math.floor(8 + Math.random() * (4 - 1) + 1);
+            } else {
+                var RLW = 8;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 98) {
+                var LFW = Math.floor(LLW + Math.random() * (20 - 1) + 1);
+            } else if (random > 96) {
+                var LFW = Math.floor(LLW - Math.random() * (20 - 1) + 1);
+            } else {
+                var LFW = LLW;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 98) {
+                var RFW = Math.floor(RLW + Math.random() * (20 - 1) + 1);
+            } else if (random > 96) {
+                var RFW = Math.floor(RLW - Math.random() * (20 - 1) + 1);
+            } else {
+                var RFW = RLW;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 35) {
+                var LCW = Math.floor(8 + Math.random() * (4 - 1) + 1);
+            } else if (random > 30) {
+                var LCW = Math.floor(LFW + Math.random() * (10 - 1) + 1);
+            } else {
+                var LCW = LFW;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 35) {
+                var RCW = Math.floor(8 + Math.random() * (4 - 1) + 1);
+            } else if (random > 30) {
+                var RCW = Math.floor(LFW + Math.random() * (10 - 1) + 1);
+            } else {
+                var RCW = RFW;
+            }
+            var random = Math.floor(Math.random() * 100) + 1;
+            if (random > 70) {
+                var CFW = RCW;
+            } else if (random > 40) {
+                var CFW = LCW;
+            } else if (random > 3) {
+                var CFW = Math.floor((RCW + LCW) / 2);
+            } else {
+                var CFW = Math.floor(Math.random() * (60 - 8) + 8);
+            }
+            $("#leftLine").val(LL);
+            $("#leftLineWall").val(LLW);
+            $("#leftField").val(LF);
+            $("#leftFieldWall").val(LFW);
+            $("#leftCenter").val(LC);
+            $("#leftCenterWall").val(LCW);
+            $("#centerField").val(CF);
+            $("#centerFieldWall").val(CFW);
+            $("#rightLine").val(RL);
+            $("#rightLineWall").val(RLW);
+            $("#rightField").val(RF);
+            $("#rightFieldWall").val(RFW);
+            $("#rightCenter").val(RC);
+            $("#rightCenterWall").val(RCW);
+            generateField();
+            generateCoordinates();
+            $(".overlay").css("display","none");
+            ipcRenderer.send('random-park', null)
+        })
+
+        ipcRenderer.on('random-park-response', (event, data) => {
+            $("#ballparkName").val(data.parkName)
+            $("#ballparkCountry").html("")
+            $("#ballparkState").html("")
+            $("#ballparkCity").html("")
+            $("#ballparkCountry").append($('<option>', {
+                value: '',
+                text: 'Select a country'
+            }));
+            $("#ballparkState").append($('<option>', {
+                value: '',
+                text: 'Select a state'
+            }));
+            $("#ballparkCity").append($('<option>', {
+                value: '',
+                text: 'Select a city'
+            }));
+            $("#ballparkCountry").append($('<option>', {
+                value: 'United States of America',
+                text: 'United States of America'
+            }));
+            for (country of data.countries) {
+                $("#ballparkCountry").append($('<option>', {
+                    value: country,
+                    text: country
+                }))
+            }
+            for (state of data.states) {
+                $("#ballparkState").append($('<option>', {
+                    value: state,
+                    text: state
+                }))
+            }
+            for (city of data.cities) {
+                $("#ballparkCity").append($('<option>', {
+                    value: city,
+                    text: city
+                }))
+            }
+            $("#ballparkState").prop("disabled",false);
+            $("#ballparkCity").prop("disabled",false);
+            $("#ballparkCountry").val("United States of America")
+            $("#ballparkState").val(data.city.State)
+            $("#ballparkCity").val(data.city.City)
+            $("#ballparkAltitude").val(data.city.Altitude);
+            $("#JanRain").val(data.city.JanRain);
+            $("#FebRain").val(data.city.FebRain);
+            $("#MarRain").val(data.city.MarRain);
+            $("#AprRain").val(data.city.AprRain);
+            $("#MayRain").val(data.city.MayRain);
+            $("#JunRain").val(data.city.JunRain);
+            $("#JulRain").val(data.city.JulRain);
+            $("#AugRain").val(data.city.AugRain);
+            $("#SepRain").val(data.city.SepRain);
+            $("#OctRain").val(data.city.OctRain);
+            $("#NovRain").val(data.city.NovRain);
+            $("#DecRain").val(data.city.DecRain);
+            $("#JanTemp").val(data.city.JanTemp);
+            $("#FebTemp").val(data.city.FebTemp);
+            $("#MarTemp").val(data.city.MarTemp);
+            $("#AprTemp").val(data.city.AprTemp);
+            $("#MayTemp").val(data.city.MayTemp);
+            $("#JunTemp").val(data.city.JunTemp);
+            $("#JulTemp").val(data.city.JulTemp);
+            $("#AugTemp").val(data.city.AugTemp);
+            $("#SepTemp").val(data.city.SepTemp);
+            $("#OctTemp").val(data.city.OctTemp);
+            $("#NovTemp").val(data.city.NovTemp);
+            $("#DecTemp").val(data.city.DecTemp);
+            $("#avgWind").val(data.city.AverageWind);
+            calculateWeather();
+            calculateFactors();
+        })
+
+        
 
         function generateField() {
             canvas.clear();
+            logoCanvas.clear();
 
             var LLx = Math.round(Math.cos(-135 * Math.PI / 180) * parseInt($("#leftLine").val()) + x0);
             var LLy = Math.round(Math.sin(-135 * Math.PI / 180) * parseInt($("#leftLine").val()) + y0);
@@ -1886,7 +1863,11 @@
                 fontSize: 20                
             });
             wallPoints = new fabric.Group([llTextStroke,lfTextStroke,lcTextStroke,cfTextStroke,rlTextStroke,rfTextStroke,rcTextStroke,llText,lfText,lcText,cfText,rlText,rfText,rcText]);
-            wallPoints.set({selectable:false,visible:false});
+            wallPoints.set({
+                selectable:false,
+                visible: ($("#distanceMarkers").val() == "on") ? true : false
+            }
+            );
             outside_border = new fabric.Path(wallPath, {
                 fill: 'transparent',
                 originX: 'center',
@@ -2310,8 +2291,8 @@
             var x = 1;
             for (object in wallPointsArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                     + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(wallPointsArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n"
-                     + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(wallPointsArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n";
+                     + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(wallPointsArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n"
+                     + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(wallPointsArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                          + "<tr>\n";
@@ -2320,8 +2301,8 @@
             }
             for (object in staticBallLocationArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(staticBallLocationArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n"
-                + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(staticBallLocationArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n";
+                + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(staticBallLocationArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n"
+                + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(staticBallLocationArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                     + "<tr>\n";
@@ -2330,8 +2311,8 @@
             }
             for (object in foulPointsArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(foulPointsArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n"
-                + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(foulPointsArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"></input></td>\n";
+                + "<td><input class=\"xCoord 640 bbCoordX\" name=\""+object+"BroadcastCoordinateX\" id=\""+object+"BroadcastCoordinateX\" type=\"number\" value=\""+Math.round((parseFloat(foulPointsArray[object]["x"]/1.25)))+"\" min=\"0\" max=\"800\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n"
+                + "<td><input class=\"yCoord 640 bbCoordY\" name=\""+object+"BroadcastCoordinateY\" id=\""+object+"BroadcastCoordinateY\" type=\"number\" value=\""+Math.round((parseFloat(foulPointsArray[object]["y"]/1.25)))+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Broadcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                     + "<tr>\n";
@@ -2369,8 +2350,8 @@
             var x = 1;
             for (object in wallPointsArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                     + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+wallPointsArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n"
-                     + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+wallPointsArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n";
+                     + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+wallPointsArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n"
+                     + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+wallPointsArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                          + "<tr>\n";
@@ -2379,8 +2360,8 @@
             }
             for (object in staticBallLocationArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+staticBallLocationArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n"
-                + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+staticBallLocationArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n";
+                + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+staticBallLocationArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n"
+                + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+staticBallLocationArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                     + "<tr>\n";
@@ -2389,8 +2370,8 @@
             }
             for (object in foulPointsArray) {
                 html += "<td style=\"text-align:right;\">"+object+":</td>\n"
-                + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+foulPointsArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n"
-                + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+foulPointsArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"></input></td>\n";
+                + "<td><input class=\"xCoord wbCoordX\" name=\""+object+"WebcastCoordinateX\" id=\""+object+"WebcastCoordinateX\" type=\"number\" value=\""+foulPointsArray[object]["x"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n"
+                + "<td><input class=\"yCoord wbCoordY\" name=\""+object+"WebcastCoordinateY\" id=\""+object+"WebcastCoordinateY\" type=\"number\" value=\""+foulPointsArray[object]["y"]+"\" min=\"0\" max=\"600\" step=\"1\" style=\"width:99%;\" data-id=\""+object+"Webcast\" data-text=\""+object+"\"/></td>\n";
                 if (isOdd(x)) {
                     html += "</tr>\n"
                     + "<tr>\n";
@@ -2628,78 +2609,47 @@
         }
 
         function calculateFactors() {
-            $.ajax({
-                type: "POST",
-                url: "http://127.0.0.1:"+port+"/calculateFactors",
-                data: $("#ballparkInformation").serialize(),
-                dataType: "json",
-                success: function(data) {
-                    $("#avgLHB").html("<b>" + data.avgLHB + "</b>");
-                    $("#avgLHBform").val(data.avgLHB);
-                    $("#avgRHB").html("<b>" + data.avgRHB + "</b>");
-                    $("#avgRHBform").val(data.avgRHB);
-                    $("#doubles").html("<b>" + data.doubles + "</b>");
-                    $("#doublesform").val(data.doubles);
-                    $("#triples").html("<b>" + data.triples + "</b>");
-                    $("#triplesform").val(data.triples);
-                    $("#hrLHB").html("<b>" + data.hrLHB + "</b>");
-                    $("#hrLHBform").val(data.hrLHB);
-                    $("#hrRHB").html("<b>" + data.hrRHB + "</b>");
-                    $("#hrRHBform").val(data.hrRHB);
-                },
-                error: function(data) {
-                    $("#ballparkFactorDiv").html(data);
-                }
-            });
-        }
-        
-/*         $("#downloadPark").on("click",function(e) {
-            e.preventDefault();
-            canvas.renderAll();
-            var fieldOptionItems = {};
-            logoCanvas.deactivateAll().renderAll();
-            var finalCanvas = document.getElementById('final');
-            var exportCtx = finalCanvas.getContext('2d');
-            exportCtx.clearRect(0,0,600,600);
-            exportCtx.drawImage(document.getElementById("c"),0,0);
-            exportCtx.drawImage(document.getElementById("c2"),0,0);
-            var exportCanvas = document.getElementById("final");
-            var dataURL = exportCanvas.toDataURL({format:"png"});
-            dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();  
-            $("#ballparkInformation").attr("method","post");
-            $("#ballparkInformation").attr("target","_blank");
-            $("#ballparkInformation").attr("action","packagepark.php");
-            switch ($("#playerCoordSelect").val()) {
-                case "broadcastPlayers":
-                    broadcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "broadcastBall":
-                    broadcastBall = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "webcastPlayers":
-                    webcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "webcastBall":
-                    webcastBall = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-            }
-            $("#canvasData").val(JSON.stringify(canvas.toJSON(['id','visible','selectable','perPixelTargetFind','centeredScaling','centeredRotation','borderColor','cornerColor','cornerSize','name','transparentCorners'])))
-            $("#fillCanvasData").val(JSON.stringify(fillCanvas.toJSON(['id','visible','selectable','perPixelTargetFind','centeredScaling','centeredRotation','borderColor','cornerColor','cornerSize','name','transparentCorners'])))
-            $("#logoCanvasData").val(JSON.stringify(logoCanvas.toJSON(['id','visible','selectable','perPixelTargetFind','centeredScaling','centeredRotation','borderColor','cornerColor','cornerSize','name','transparentCorners'])))
-            $("#broadcastPlayerCoordinates").val(broadcastPlayers);
-            $("#webcastPlayerCoordinates").val(webcastPlayers);
-            $("#broadcastBallCoordinates").val(broadcastBall);
-            $("#webcastBallCoordinates").val(webcastBall);
-            $("#frmImageData").val(dataURL);
-            $("div.fieldOption").each(function(e) {
-                fieldOptionItems[$(this).attr("id")] = $(this).is(':visible');
+            ipcRenderer.send('calculate-factors', {
+                ballparkType: parseInt($("#ballparkType").val()),
+                ballparkSurface: $("#ballparkSurface").val(),
+                ballparkFoulArea: parseInt($("#ballparkFoulArea").val()),
+                ballparkAltitude: parseInt($("#ballparkAltitude").val()),
+                leftLine: parseInt($("#leftLine").val()),
+                leftField: parseInt($("#leftField").val()),
+                leftCenter: parseInt($("#leftCenter").val()),
+                centerField: parseInt($("#centerField").val()),
+                rightCenter: parseInt($("#rightCenter").val()),
+                rightField: parseInt($("#rightField").val()),
+                rightLine: parseInt($("#rightLine").val()),
+                leftLineWall: parseInt($("#leftLineWall").val()),
+                leftFieldWall: parseInt($("#leftFieldWall").val()),
+                leftCenterWall: parseInt($("#leftCenterWall").val()),
+                centerFieldWall: parseInt($("#centerFieldWall").val()),
+                rightCenterWall: parseInt($("#rightCenterWall").val()),
+                rightFieldWall: parseInt($("#rightFieldWall").val()),
+                rightLineWall:parseInt($("#rightLineWall").val()),
+                carL: parseInt($("#carL").val()),
+                carC: parseInt($("#carC").val()),
+                carR: parseInt($("#carR").val())
             })
-            fieldOptionItems[$("#onDeckCirclesItem").attr("id")] = $("#onDeckCirclesItem").is(':visible');
-            $("#fieldOptionItems").val(JSON.stringify(fieldOptionItems));
-            //$("#ballparkInformation").submit();
-        }) */
+        }
+
+        ipcRenderer.on('calculate-factors-response', (event, data) => {
+            $("#avgLHB").html(data.avgLHB);
+            $("#avgLHBform").val(data.avgLHB);
+            $("#avgRHB").html(data.avgRHB);
+            $("#avgRHBform").val(data.avgRHB);
+            $("#doubles").html(data.doubles);
+            $("#doublesform").val(data.doubles);
+            $("#triples").html(data.triples);
+            $("#triplesform").val(data.triples);
+            $("#hrLHB").html(data.hrLHB);
+            $("#hrLHBform").val(data.hrLHB);
+            $("#hrRHB").html(data.hrRHB);
+            $("#hrRHBform").val(data.hrRHB);
+        })
         
-        $("#ballparkInformation").submit(function(e) {
+        /* $("#ballparkInformation").submit(function(e) {
             e.preventDefault()
             $(".pleaseWait").html("Preparing Park...");    
             $(".overlay").css("display","table");
@@ -2721,60 +2671,53 @@
                 }
             })
             return true;
-        });
+        }); */
 		
 		$("#downloadParkOriginal").on("click",function(e) {
-			e.preventDefault();
+            e.preventDefault();
+            let statesTmp = $('#ballparkState option').map(function() {
+                var obj = {};
+                obj[this.value] = this.textContent;
+                return obj;
+            });
+            let states = statesTmp.get()
+            let citiesTmp = $('#ballparkCity option').map(function() {
+                var obj = {};
+                obj[this.value] = this.textContent;
+                return obj;
+            });
+            let cities = citiesTmp.get()
+            $(".pleaseWait").html("Preparing Park...");    
+            $(".overlay").css("display","table");
             canvas.renderAll();
-            var fieldOptionItems = {};
+            let json = {}
             logoCanvas.deactivateAll().renderAll();
-            var finalCanvas = document.getElementById('final');
-            var exportCtx = finalCanvas.getContext('2d');
+            let finalCanvas = document.getElementById('final');
+            let exportCtx = finalCanvas.getContext('2d');
             exportCtx.clearRect(0,0,600,600);
             exportCtx.drawImage(document.getElementById("c"),0,0);
             exportCtx.drawImage(document.getElementById("c2"),0,0);
-            var exportCanvas = document.getElementById("final");
-            var dataURL = exportCanvas.toDataURL({format:"png"});
-            dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();  
-            $("#ballparkInformation").attr("method","post");
-            $("#ballparkInformation").attr("target","_blank");
-            //$("#ballparkInformation").attr("action","packagepark2.php");
-            $("#ballparkInformation").attr("action","http://127.0.0.1:"+port+"/downloadBallpark");
-            switch ($("#playerCoordSelect").val()) {
-                case "broadcastPlayers":
-                    broadcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "broadcastBall":
-                    broadcastBall = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "webcastPlayers":
-                    webcastPlayers = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-                case "webcastBall":
-                    webcastBall = JSON.stringify(coordinateCanvas.toJSON(['id','xID','yID','hasBorders','borderColor','hasControls']));
-                    break;
-            }
-            $("#canvasData").val("")
-            $("#fillCanvasData").val("")
-            $("#logoCanvasData").val("")
-            $("#broadcastPlayerCoordinates").val(broadcastPlayers);
-            $("#webcastPlayerCoordinates").val(webcastPlayers);
-            $("#broadcastBallCoordinates").val(broadcastBall);
-            $("#webcastBallCoordinates").val(webcastBall);
-            $("#frmImageData").val(dataURL);
-            $("div.fieldOption").each(function(e) {
-                fieldOptionItems[$(this).attr("id")] = $(this).is(':visible');
-            })
-            fieldOptionItems[$("#onDeckCirclesItem").attr("id")] = $("#onDeckCirclesItem").is(':visible');
-            $("#fieldOptionItems").val(JSON.stringify(fieldOptionItems));
-            $("#ballparkInformation").submit();
+            let exportCanvas = document.getElementById("final");
+            let dataURL = exportCanvas.toDataURL({format:"png"});
+            dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();
+            json.states = states
+            json.cities = cities
+            json.formValues = FormDataJson.toJson($("#ballparkInformation"), { includeDisabled: true })
+            json.canvasValues = canvas.toJSON()
+            json.logoCanvasValues = logoCanvas.toJSON()
+            json.fillCanvasValues = fillCanvas.toJSON()
+            jsoncoordinateCanvasValues = coordinateCanvas.toJSON()
+            //ipcRenderer.send('save-ballpark',convertFormToJSON($("#ballparkInformation")))
+            ipcRenderer.send('save-ballpark',{json: json, imageData: dataURL})
         })
-        
-        document.getElementById('uploadedImg').onchange = function handleImage(e) {
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                var imgObj = new Image();
-                imgObj.src = event.target.result;
+
+        $("#addImage").on("click", function(e) {
+            ipcRenderer.send("add-image", null)
+        })
+
+        ipcRenderer.on('add-image-response', (event, data) => {
+            var imgObj = new Image();
+                imgObj.src = data.image;
                 imgObj.onload = function () {
                     var image = new fabric.Image(imgObj);
                     image.set({
@@ -2790,7 +2733,7 @@
                         cornerColor: 'yellow',
                         cornerSize: 12,
                         transparentCorners: false,
-                        id: $("#uploadedImg").val().split('\\').pop()
+                        id: data.filename
                     });
                     image.clipTo = function(ctx) {
                         ctx.save();
@@ -2808,16 +2751,15 @@
                     imgTop = image.get('top');
                     imgLeft = image.get('left');
                 }
-                
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        }
+        })
         
-        document.getElementById('uploadedPattern').onchange = function handleImage(e) {
-            var reader = new FileReader();
-            reader.onload = function (event) {
-                var imgObj = new Image();
-                imgObj.src = event.target.result;
+        $("#addPattern").on("click", function(e) {
+            ipcRenderer.send("add-pattern", null)
+        })
+        
+        ipcRenderer.on('add-pattern-response', (event, data) => {
+            var imgObj = new Image();
+                imgObj.src = data.image;
                 imgObj.onload = function() {
                     $("#customMowPattern").val(imgObj.src);
                     $("#mow_pattern option[value='"+imgObj.src+"']").prop('selected', true);
@@ -2826,9 +2768,16 @@
                     $("#mowPatternOpacitySlider").val(mow_pattern.opacity*100);
                     $("#mowPatternOpacityValue").html(mow_pattern.opacity*100);
                 }
-            }
-            reader.readAsDataURL(e.target.files[0]);
-        }
+        })
+
+        $("#randomName").on('click', function(e) {
+            e.preventDefault()
+            ipcRenderer.send('random-park-name', null)
+        })
+
+        ipcRenderer.on('random-park-name-response', (event, data) => {
+            $("#ballparkName").val(data)
+        })
     
         $("#showPlayers").on("click",function(e) {
             logoCanvas.deactivateAll().renderAll();
@@ -3119,11 +3068,7 @@
             $("#"+obj.get('yID')).val(inputTop);
         });
 
-        $("#uploadPark").on("click",function(e) {
-            $("#loadPark").click();
-        })
-
-        document.getElementById('loadPark').onchange = function uploadFile(e) {
+        /* document.getElementById('loadPark').onchange = function uploadFile(e) {
             if (this.files[0].name.substr(this.files[0].name.length - 4) != ".bpk") {
                 alert("This does not appaer to be a valid park file.");
                 return false;
@@ -3249,7 +3194,7 @@
                 }
             });
             
-        }
+        } */
         
         $("#colorSquare").on("click",function(e) {
             $(this).removeClass("colorSquareSelected").addClass("colorSquareActive");
@@ -3697,5 +3642,8 @@
             
             image.src = url;
         }
+
+        
+
     </script>
 </html>

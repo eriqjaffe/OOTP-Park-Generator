@@ -155,6 +155,10 @@ a {
 	border: 2px solid #648536;
 }
 
+.factor {
+	font-weight: bold;
+}
+
 .svg {
 	display:block;
 	max-height:600px;
@@ -420,4 +424,12 @@ a {
     display:table-cell; 
     vertical-align:middle;
     z-index:250;
+}
+
+.flexContainer {
+    display: flex;
+}
+
+.inputField {
+    flex: 1;
 }
