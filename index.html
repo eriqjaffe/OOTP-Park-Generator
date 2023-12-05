@@ -1328,20 +1328,66 @@
         })
 
         $("#loadPark").on("click", function() {
-            console.log("WHEEEE")
             ipcRenderer.send('load-ballpark', null)
         })
 
         ipcRenderer.on('load-park-response', (event, data) => {
             if (data.result == "success") {
-                console.log(data.result)
+                $("#ballparkState").html("")
+                $("#ballparkCity").html("")
+                let json = JSON.parse(data.json)
+                if (json.states.length > 0) {
+                    $("#ballparkState").prop("disabled",false);
+                    $.each(json.states, function(index, state) {
+                        $.each(state, function(key, value) {
+                            $("#ballparkState").append($("<option>", {
+                                value: key,
+                                text: value
+                            }));
+                        });
+                    });
+                } else {
+                    $("#ballparkState").prop("disabled",true);
+                }
+                if (json.cities.length > 0) {
+                    $("#ballparkCity").prop("disabled",false);
+                    $.each(json.cities, function(index, city) {
+                        $.each(city, function(key, value) {
+                            $("#ballparkCity").append($("<option>", {
+                                value: key,
+                                text: value
+                            }));
+                        });
+                    });
+                } else {
+                    $("#ballparkCity").prop("disabled",true);
+                }
+                FormDataJson.fromJson($("#ballparkInformation"), json.formValues)
+                canvas.loadFromJSON(json.canvasValues, canvas.renderAll.bind(canvas), function(o, object) {
+                    canvas.add(object);
+                    if (object.id == "field") {
+                        clippingPath.path = object.path;
+                    }
+                })
+                fillCanvas.loadFromJSON(json.fillCanvasValues, fillCanvas.renderAll.bind(fillCanvas), function(o, object) {
+                    fillCanvas.add(object);
+                })
+                logoCanvas.loadFromJSON(json.logoCanvasValues, logoCanvas.renderAll.bind(logoCanvas), function(o, object) {
+                    logoCanvas.add(object);
+                })
+                coordinateCanvas.loadFromJSON(json.coordinateCanvasValues, coordinateCanvas.renderAll.bind(coordinateCanvas), function(o, object) {
+                    coordinateCanvas.add(object);
+                })
+                generateField();
+                generateCoordinates();
+                calculateWeather();
+                calculateFactors();
             } else {
                 ipcRenderer.send('show-error',data.message)
             }
         })
 
         $("#randomPark").on("click", function() {
-            console.log("random!")
             $(".randomizer").each(function() {
                 var options = $(this).children('option');
                 var random = Math.floor(options.length * (Math.random() % 1));
@@ -1817,7 +1863,6 @@
                 fontSize: 20                
             });
             wallPoints = new fabric.Group([llTextStroke,lfTextStroke,lcTextStroke,cfTextStroke,rlTextStroke,rfTextStroke,rcTextStroke,llText,lfText,lcText,cfText,rlText,rfText,rcText]);
-            //console.log($("#distanceMarkers").val())
             wallPoints.set({
                 selectable:false,
                 visible: ($("#distanceMarkers").val() == "on") ? true : false
@@ -2630,6 +2675,18 @@
 		
 		$("#downloadParkOriginal").on("click",function(e) {
             e.preventDefault();
+            let statesTmp = $('#ballparkState option').map(function() {
+                var obj = {};
+                obj[this.value] = this.textContent;
+                return obj;
+            });
+            let states = statesTmp.get()
+            let citiesTmp = $('#ballparkCity option').map(function() {
+                var obj = {};
+                obj[this.value] = this.textContent;
+                return obj;
+            });
+            let cities = citiesTmp.get()
             $(".pleaseWait").html("Preparing Park...");    
             $(".overlay").css("display","table");
             canvas.renderAll();
@@ -2642,7 +2699,9 @@
             exportCtx.drawImage(document.getElementById("c2"),0,0);
             let exportCanvas = document.getElementById("final");
             let dataURL = exportCanvas.toDataURL({format:"png"});
-            dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();  
+            dataURL = dataURL.substr(dataURL.indexOf(',') + 1).toString();
+            json.states = states
+            json.cities = cities
             json.formValues = FormDataJson.toJson($("#ballparkInformation"), { includeDisabled: true })
             json.canvasValues = canvas.toJSON()
             json.logoCanvasValues = logoCanvas.toJSON()

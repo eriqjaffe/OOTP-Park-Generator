@@ -736,6 +736,7 @@ ipcMain.on('show-error', (event, arg) => {
 		message: arg
 	})
 })
+
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
