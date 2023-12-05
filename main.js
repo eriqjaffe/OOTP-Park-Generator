@@ -918,8 +918,8 @@ const createWindow = () => {
   });
 
   // Open the DevTools.
-      mainWindow.maximize()
-      mainWindow.webContents.openDevTools()
+      //mainWindow.maximize()
+      //mainWindow.webContents.openDevTools()
 };
 
 app.whenReady().then(() => {
