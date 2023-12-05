@@ -1,7 +1,7 @@
 {
   "name": "parkgen",
   "productName": "OOTP Park Generator",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "OOTP Park Generator",
   "main": "main.js",
   "scripts": {
